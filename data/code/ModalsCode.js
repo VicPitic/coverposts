@@ -245,13 +245,13 @@ const Modals = () => {
                             overlay={
                             <Tooltip>Tooltip</Tooltip>
                             }>
-                            <Link href="#" variant="secondary" size="sm" >This Link</Link>
+                            <a href="#" variant="secondary" size="sm" >This Link</a>
                         </OverlayTrigger> and 
                         <OverlayTrigger trigger={['hover', 'focus']} 
                             overlay={
                             <Tooltip>Tooltip</Tooltip>
                             }>
-                            <Link href="#" variant="secondary" size="sm" className="m-1">That Link</Link>
+                            <a href="#" variant="secondary" size="sm" className="m-1">That Link</a>
                         </OverlayTrigger> have tooltips on hover.
                     </div>
                 </Modal.Body>
@@ -311,13 +311,13 @@ const Modals = () => {
 `.trim();
 
 export const ModalsCode = [
-	SampleExamplesCode,
-	LiveDemoCode,
-	LongContentCode,
-	ScrollableModalCode,
-	VerticallyCenteredCode,
-	TooltipsPopoversCode,
-	OptionalSizesCode
+  SampleExamplesCode,
+  LiveDemoCode,
+  LongContentCode,
+  ScrollableModalCode,
+  VerticallyCenteredCode,
+  TooltipsPopoversCode,
+  OptionalSizesCode
 ];
 
 export default ModalsCode;

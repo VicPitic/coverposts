@@ -11,7 +11,7 @@ import {
 } from 'react-feather';
 
 // import widget/custom components
-import { HighlightCode }  from 'widgets';
+import { HighlightCode } from 'widgets';
 
 // import react code data file
 import {
@@ -26,7 +26,7 @@ import {
 
 const Paginations = () => {
 	return (
-        <Container fluid className="p-6">
+		<Container fluid className="p-6">
 			<Row>
 				<Col lg={12} md={12} sm={12}>
 					<div className="border-bottom pb-4 mb-4 d-md-flex align-items-center justify-content-between">
@@ -304,9 +304,9 @@ const Paginations = () => {
 						<h3>Alignment</h3>
 						<p>
 							Change the alignment of pagination components with{' '}
-							<Link href="#">
+							<a href="#">
 								flexbox utilities
-							</Link>.
+							</a>.
 						</p>
 					</div>
 					<div className="mb-4 mt-4">
@@ -398,7 +398,7 @@ const Paginations = () => {
 			</Row>
 			{/* end of justify-content-end */}
 		</Container>
-    );
+	);
 };
 
 export default Paginations;

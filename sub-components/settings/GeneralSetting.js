@@ -46,7 +46,7 @@ const GeneralSetting = () => {
         <Card>
           <Card.Body>
             <div className="mb-6">
-              <h4 className="mb-1">Generate Social Media Posts</h4>
+              <h4 className="mb-1">Fill in the filters below and we'll generate 5 scoial media posts including illustration, pictures, and so on.</h4>
             </div>
             <Form onSubmit={handleGeneratePosts}>
               <Row className="mb-3">
@@ -107,9 +107,21 @@ const GeneralSetting = () => {
               </Button>
             </Form>
             {/* Display generatedPosts */}
-            <div>
+            <div className="flex-container" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               {generatedPosts.map((post, index) => (
-                <p key={index}>{post}</p>
+                <Card key={index} style={{ width: "18%", margin: "1%" }} className="rounded shadow mb-3">
+                  <Card.Body>
+                    <p>{post}</p>
+                    <div style={{ position: "absolute", bottom: "10px", left: "10px" }}>
+                      <Button variant="primary" className="me-2" size="sm">
+                        Add a picture 📷
+                      </Button>
+                      <Button variant="primary" size="sm">
+                        Post 🚀
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
               ))}
             </div>
             <div className="image-grid">

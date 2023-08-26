@@ -7,7 +7,7 @@ import { Col, Row, Card, Form, Dropdown, Image, Button } from 'react-bootstrap';
 const RecentFromBlog = () => {
 
   const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    (<Link
+    (<a
       href=""
       ref={ref}
       onClick={(e) => {
@@ -16,7 +16,7 @@ const RecentFromBlog = () => {
       }}
       className="text-muted text-primary-hover">
       {children}
-    </Link>)
+    </a>)
   ));
 
   CustomToggle.displayName = 'CustomToggle';

@@ -10,7 +10,7 @@ import ProjectsContributionsData from 'data/profile/ProjectsContributionsData';
 const ProjectsContributions = () => {
 
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-        (<Link
+        (<a
             href=""
             ref={ref}
             onClick={(e) => {
@@ -19,7 +19,7 @@ const ProjectsContributions = () => {
             }}
             className="text-muted text-primary-hover">
             {children}
-        </Link>)
+        </a>)
     ));
 
     CustomToggle.displayName = 'CustomToggle';
@@ -62,7 +62,7 @@ const ProjectsContributions = () => {
                                     {/* text */}
                                     <div className="ms-3 ">
                                         <h5 className="mb-1">
-                                            <Link href="#" className="text-inherit">{item.projectName}</Link>
+                                            <a href="#" className="text-inherit">{item.projectName}</a>
                                         </h5>
                                         <p className="mb-0 fs-5 text-muted">{item.description}</p>
                                     </div>
@@ -80,7 +80,7 @@ const ProjectsContributions = () => {
                                     </div>
                                     <div>
                                         {/* dropdown */}
-                                        <ActionMenu/>
+                                        <ActionMenu />
                                     </div>
                                 </div>
                             </div>

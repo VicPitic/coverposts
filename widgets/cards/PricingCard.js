@@ -15,10 +15,10 @@ const PricingCard = ({ content }) => {
                     <h1 className="fw-bold me-1 mb-0">${plan.monthly} </h1>
                     <p className="mb-0">/mo</p>
                 </div>
-                <Link href="#" className={`btn btn-${plan.buttonClass ? plan.buttonClass : 'outline-primary'
+                <a href="#" className={`btn btn-${plan.buttonClass ? plan.buttonClass : 'outline-primary'
                     }`}>
                     {plan.buttonText}
-                </Link>
+                </a>
             </Card.Body>
             <Card.Body>
                 <p className="mb-0">{plan.featureHeading}</p>

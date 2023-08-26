@@ -17,12 +17,12 @@ const Layout = () => {
       </Row>
       <Row className="justify-content-center">
         <Col lg={3} sm={6} className="my-4 ">
-          <Link className="card" href="/">
+          <a className="card" href="/">
             <Image className="card-img-top" src="/images/layouts/default-classic.svg" alt="Image Description" />
             <div className="card-body text-center">
               <h5 className="mb-0">Classic</h5>
             </div>
-          </Link>
+          </a>
         </Col>
       </Row>
     </Container>

@@ -27,7 +27,7 @@ const Pricing = () => {
                     <p className="mb-lg-0">Or simply leverage the expertise of our consultation team.</p>
                   </div>
                   <div className="ms-0 ms-lg-3">
-                    <Link href="#" className="btn btn-outline-primary btn-sm">Talk to us</Link>
+                    <a href="#" className="btn btn-outline-primary btn-sm">Talk to us</a>
                   </div>
                 </div>
               </Col>

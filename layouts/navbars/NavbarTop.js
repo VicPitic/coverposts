@@ -15,13 +15,13 @@ const NavbarTop = (props) => {
 		<Navbar expanded="lg" className="navbar-classic navbar navbar-expand-lg">
 			<div className='d-flex justify-content-between w-100'>
 				<div className="d-flex align-items-center">
-					<Link
+					<a
 						href="#"
 						id="nav-toggle"
 						className="nav-icon me-2 icon-xs"
 						onClick={() => props.data.SidebarToggleMenu(!props.data.showMenu)}>
 						<Menu size="18px" />
-					</Link>
+					</a>
 					<div className="ms-lg-3 d-none d-md-none d-lg-block">
 						{/* Search Form */}
 						<Form className="d-flex align-items-center">

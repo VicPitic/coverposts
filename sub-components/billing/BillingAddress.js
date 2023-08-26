@@ -109,16 +109,16 @@ const BillingAddress = () => {
                       <span className="d-block mb-3 text-dark fw-bold">Shipping Billing Address</span>
                       <span className="d-block text-dark fw-medium fs-4">Valarie Tarrant</span>
                       <span className="d-block mb-4">3757 Morgan Street Tallahassee, FL 32301</span>
-                      <Link href="#" className="me-2 link-success">Edit</Link>
-                      <Link href="#" className="me-2 link-danger">Delete</Link>
-                      <Link href="#" className="me-2 text-muted text-primary-hover">Remove as Default Billing</Link>
+                      <a href="#" className="me-2 link-success">Edit</a>
+                      <a href="#" className="me-2 link-danger">Delete</a>
+                      <a href="#" className="me-2 text-muted text-primary-hover">Remove as Default Billing</a>
                     </Form.Check.Label>
                   </Form.Check>
                 </div>
               </Col>
               <Col lg={6} md={12} xs={12} className="d-flex justify-content-lg-end">
                 <div className="mb-2">
-                  <p className="mb-1">E-mail: <Link href="#">valarietarrant@dashui.com</Link></p>
+                  <p className="mb-1">E-mail: <a href="#">valarietarrant@dashui.com</a></p>
                   <p>Phone: 321-654-0987</p>
                 </div>
               </Col>
@@ -132,15 +132,15 @@ const BillingAddress = () => {
                     <span className="d-block mb-3 text-dark fw-bold">Default Billing Address</span>
                     <span className="d-block text-dark fw-medium fs-4">Mildred Cantu</span>
                     <span className="d-block mb-4">3757 Morgan Street Tallahassee, FL 32301</span>
-                    <Link href="#" className="me-2 link-success">Edit</Link>
-                    <Link href="#" className="me-2 link-danger">Delete</Link>
-                    <Link href="#" className="me-2 text-muted text-primary-hover">Set as Default</Link>
+                    <a href="#" className="me-2 link-success">Edit</a>
+                    <a href="#" className="me-2 link-danger">Delete</a>
+                    <a href="#" className="me-2 text-muted text-primary-hover">Set as Default</a>
                   </Form.Check.Label>
                 </Form.Check>
               </Col>
               <Col lg={6} md={12} xs={12} className="d-flex justify-content-lg-end">
                 <div className="mb-2">
-                  <p className="mb-1">E-mail: <Link href="#">valarietarrant@dashui.com</Link></p>
+                  <p className="mb-1">E-mail: <a href="#">valarietarrant@dashui.com</a></p>
                   <p>Phone: 321-654-0987</p>
                 </div>
               </Col>

@@ -110,14 +110,14 @@ const CurrentPlan = () => {
                                     Yearly Payment
                                 </small>
                                 <h1 className="fw-bold text-primary">$499 USD</h1>
-                                <Link href="#" className="mb-3 text-muted text-primary-hover d-block">Learn more about our membership policy</Link>
+                                <a href="#" className="mb-3 text-muted text-primary-hover d-block">Learn more about our membership policy</a>
                                 <Button variant="dark" className="d-grid mb-2 w-100" onClick={() => setModalShow(true)}>
                                     Change Plan
                                 </Button>
                                 <ChangePlanModal show={modalShow} onHide={() => setModalShow(false)} />
-                                <Link href="#" className="btn btn-outline-white d-grid">
+                                <a href="#" className="btn btn-outline-white d-grid">
                                     Cancel Subscription
-                                </Link>
+                                </a>
                             </div>
                         </Col>
                     </Row>
@@ -132,8 +132,8 @@ const CurrentPlan = () => {
                             </div>
                         </div>
                         <div className="text-center text-md-start">
-                            <Link href="#" className="link-danger">Remove</Link>
-                            <Link href="#" className="btn btn-outline-white ms-2">Change Card</Link>
+                            <a href="#" className="link-danger">Remove</a>
+                            <a href="#" className="btn btn-outline-white ms-2">Change Card</a>
                         </div>
                     </div>
                 </Card.Footer>

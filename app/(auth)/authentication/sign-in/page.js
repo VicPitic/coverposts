@@ -17,7 +17,7 @@ const SignIn = () => {
           {/* Card body */}
           <Card.Body className="p-6">
             <div className="mb-4">
-              <Link href="/"><Image src="/images/brand/logo/logo-primary.svg" className="mb-2" alt="" /></Link>
+              <a href="/"><Image src="/images/brand/logo/logo-primary.svg" className="mb-2" alt="" /></a>
               <p className="mb-6">Please enter your user information.</p>
             </div>
             {/* Form */}
@@ -49,10 +49,10 @@ const SignIn = () => {
                   </div>
                   <div className="d-md-flex justify-content-between mt-4">
                     <div className="mb-2 mb-md-0">
-                      <Link href="/authentication/sign-up" className="fs-5">Create An Account </Link>
+                      <a href="/authentication/sign-up" className="fs-5">Create An Account </a>
                     </div>
                     <div>
-                      <Link href="/authentication/forget-password" className="text-inherit fs-5">Forgot your password?</Link>
+                      <a href="/authentication/forget-password" className="text-inherit fs-5">Forgot your password?</a>
                     </div>
                   </div>
                 </div>

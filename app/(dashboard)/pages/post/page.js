@@ -13,7 +13,7 @@ const Settings = () => {
         <Container fluid className="p-6">
 
             {/* Page Heading */}
-            <PageHeading heading="General" />
+            <PageHeading heading="✨ Create perfect social media content from blog content" />
 
             {/* General Settings */}
             <GeneralSetting />

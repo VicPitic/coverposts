@@ -51,7 +51,7 @@ const Charts = () => {
     };
 
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-        (<Link
+        (<a
             href=""
             ref={ref}
             onClick={(e) => {
@@ -60,7 +60,7 @@ const Charts = () => {
             }}
             className="text-muted text-primary-hover">
             {children}
-        </Link>)
+        </a>)
     ));
 
     CustomToggle.displayName = 'CustomToggle';

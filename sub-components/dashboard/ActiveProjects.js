@@ -36,7 +36,7 @@ const ActiveProjects = () => {
                                                 </div>
                                                 <div className="ms-3 lh-1">
                                                     <h5 className=" mb-1">
-                                                        <Link href="#" className="text-inherit">{item.projectName}</Link></h5>
+                                                        <a href="#" className="text-inherit">{item.projectName}</a></h5>
                                                 </div>
                                             </div>
                                         </td>
@@ -68,7 +68,7 @@ const ActiveProjects = () => {
                         </tbody>
                     </Table>
                     <Card.Footer className="bg-white text-center">
-                        <Link href="#" className="link-primary">View All Projects</Link>
+                        <a href="#" className="link-primary">View All Projects</a>
                     </Card.Footer>
                 </Card>
             </Col>

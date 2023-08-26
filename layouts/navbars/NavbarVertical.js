@@ -2,7 +2,7 @@
 // import node module libraries
 import { Fragment, useContext } from 'react';
 import Link from 'next/link';
-import { usePathname   } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useMediaQuery } from 'react-responsive';
 import {
 	ListGroup,
@@ -22,7 +22,7 @@ import 'simplebar/dist/simplebar.min.css';
 import { DashboardMenu } from 'routes/DashboardRoutes';
 
 const NavbarVertical = (props) => {
-	const location = usePathname ()
+	const location = usePathname()
 	const CustomToggle = ({ children, eventKey, icon }) => {
 		const { activeEventKey } = useContext(AccordionContext);
 		const decoratedOnClick = useAccordionButton(eventKey, () =>
@@ -31,7 +31,7 @@ const NavbarVertical = (props) => {
 		const isCurrentEventKey = activeEventKey === eventKey;
 		return (
 			<li className="nav-item">
-				<Link
+				<a
 					href="#"
 					className="nav-link "
 					onClick={decoratedOnClick}
@@ -41,7 +41,7 @@ const NavbarVertical = (props) => {
 					aria-controls="navDashboard">
 					{icon ? <i className={`nav-icon fe fe-${icon} me-2`}></i> : ''}{' '}
 					{children}
-				</Link>
+				</a>
 			</li>
 		);
 	};
@@ -52,7 +52,7 @@ const NavbarVertical = (props) => {
 		);
 		const isCurrentEventKey = activeEventKey === eventKey;
 		return (
-			(<Link
+			(<a
 				href="#"
 				className="nav-link "
 				onClick={decoratedOnClick}
@@ -61,13 +61,13 @@ const NavbarVertical = (props) => {
 				aria-expanded={isCurrentEventKey ? true : false}
 				aria-controls="navDashboard">
 				{children}
-			</Link>)
+			</a>)
 		);
 	};
 
 	const generateLink = (item) => {
 		return (
-			(<Link
+			(<a
 				href={item.link}
 				className={`nav-link ${location === item.link ? 'active' : ''
 					}`}
@@ -88,7 +88,7 @@ const NavbarVertical = (props) => {
 					''
 				)}
 
-			</Link>)
+			</a>)
 		);
 	};
 
@@ -98,10 +98,10 @@ const NavbarVertical = (props) => {
 		<Fragment>
 			<SimpleBar style={{ maxHeight: '100vh' }}>
 				<div className="nav-scroller">
-					<Link href="/" className="navbar-brand">
+					<a href="/" className="navbar-brand">
 						<Image src="/images/brand/logo/logo.svg" alt="" />
-					</Link>
-				</div>				
+					</a>
+				</div>
 				{/* Dashboard Menu */}
 				<Accordion defaultActiveKey="0" as="ul" className="navbar-nav flex-column">
 					{DashboardMenu.map(function (menu, index) {
@@ -138,8 +138,8 @@ const NavbarVertical = (props) => {
 																		{menuLevel1Item.title}
 																		{menuLevel1Item.badge ? (
 																			<Badge className="ms-1" bg={
-																					menuLevel1Item.badgecolor ? menuLevel1Item.badgecolor : 'primary'
-																				}>
+																				menuLevel1Item.badgecolor ? menuLevel1Item.badgecolor : 'primary'
+																			}>
 																				{menuLevel1Item.badge}
 																			</Badge>
 																		) : ('')}
@@ -147,7 +147,7 @@ const NavbarVertical = (props) => {
 																	<Accordion.Collapse eventKey={0} bsPrefix="nav-item">
 																		<ListGroup as="ul" bsPrefix="" className="nav flex-column">
 																			{/* second level menu started  */}
-																			{menuLevel1Item.children.map(function (menuLevel2Item,menuLevel2Index) {
+																			{menuLevel1Item.children.map(function (menuLevel2Item, menuLevel2Index) {
 																				if (menuLevel2Item.children) {
 																					return (
 																						<ListGroup.Item as="li" bsPrefix="nav-item" key={menuLevel2Index}>
@@ -157,8 +157,8 @@ const NavbarVertical = (props) => {
 																									{menuLevel2Item.title}
 																									{menuLevel2Item.badge ? (
 																										<Badge className="ms-1" bg={
-																												menuLevel2Item.badgecolor ? menuLevel2Item.badgecolor : 'primary'
-																											}>
+																											menuLevel2Item.badgecolor ? menuLevel2Item.badgecolor : 'primary'
+																										}>
 																											{menuLevel2Item.badge}
 																										</Badge>
 																									) : ('')}
@@ -166,7 +166,7 @@ const NavbarVertical = (props) => {
 																								<Accordion.Collapse eventKey={0} bsPrefix="nav-item">
 																									<ListGroup as="ul" bsPrefix="" className="nav flex-column">
 																										{/* third level menu started  */}
-																										{menuLevel2Item.children.map(function (menuLevel3Item,menuLevel3Index) {
+																										{menuLevel2Item.children.map(function (menuLevel3Item, menuLevel3Index) {
 																											return (
 																												<ListGroup.Item key={menuLevel3Index} as="li" bsPrefix="nav-item">
 																													{generateLink(menuLevel3Item)}
@@ -187,7 +187,7 @@ const NavbarVertical = (props) => {
 																						</ListGroup.Item>
 																					);
 																				}
-																				
+
 																			})}
 																			{/* end of second level menu  */}
 																		</ListGroup>
@@ -215,17 +215,17 @@ const NavbarVertical = (props) => {
 								return (
 									<Card bsPrefix="nav-item" key={index}>
 										{/* menu item without any childern items like Documentation and Changelog items*/}
-										<Link href={menu.link} className={`nav-link ${location === menu.link ? 'active' : ''} ${menu.title === 'Download' ? 'bg-primary text-white' : ''}`}>
+										<a href={menu.link} className={`nav-link ${location === menu.link ? 'active' : ''} ${menu.title === 'Download' ? 'bg-primary text-white' : ''}`}>
 											{typeof menu.icon === 'string' ? (
 												<i className={`nav-icon fe fe-${menu.icon} me-2`}></i>
 											) : (menu.icon)}
-											{menu.title} 
+											{menu.title}
 											{menu.badge ? (
 												<Badge className="ms-1" bg={menu.badgecolor ? menu.badgecolor : 'primary'}>
 													{menu.badge}
 												</Badge>
 											) : ('')}
-										</Link>
+										</a>
 										{/* end of menu item without any childern items */}
 									</Card>
 								);
@@ -234,7 +234,7 @@ const NavbarVertical = (props) => {
 					})}
 				</Accordion>
 				{/* end of Dashboard Menu */}
-				
+
 			</SimpleBar>
 		</Fragment>
 	);

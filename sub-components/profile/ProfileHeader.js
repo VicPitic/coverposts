@@ -15,44 +15,44 @@ const ProfileHeader = () => {
               {/* avatar */}
               <div className="avatar-xxl avatar-indicators avatar-online me-2 position-relative d-flex justify-content-end align-items-end mt-n10">
                 <Image src="/images/avatar/avatar-1.jpg" className="avatar-xxl rounded-circle border border-4 border-white-color-40" alt="" />
-                <Link href="#!" className="position-absolute top-0 right-0 me-2" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Verified">
+                <a href="#!" className="position-absolute top-0 right-0 me-2" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Verified">
                   <Image src="/images/svg/checked-mark.svg" alt="" height="30" width="30" />
-                </Link>
+                </a>
               </div>
               {/* text */}
               <div className="lh-1">
                 <h2 className="mb-0">Jitu Chauhan
-                  <Link href="#!" className="text-decoration-none" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Beginner">
-                  </Link>
+                  <a href="#!" className="text-decoration-none" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Beginner">
+                  </a>
                 </h2>
                 <p className="mb-0 d-block">@imjituchauhan</p>
               </div>
             </div>
             <div>
-              <Link href="#" className="btn btn-outline-primary d-none d-md-block">Edit Profile</Link>
+              <a href="#" className="btn btn-outline-primary d-none d-md-block">Edit Profile</a>
             </div>
           </div>
           {/* nav */}
           <ul className="nav nav-lt-tab px-4" id="pills-tab" role="tablist">
             <li className="nav-item">
-              <Link className="nav-link active" href="#">Overview</Link>
+              <a className="nav-link active" href="#">Overview</a>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="#">Project</Link>
+              <a className="nav-link" href="#">Project</a>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="#">Files</Link>
+              <a className="nav-link" href="#">Files</a>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="#">Teams</Link>
+              <a className="nav-link" href="#">Teams</a>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="#">
+              <a className="nav-link" href="#">
                 Followers
-              </Link>
+              </a>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="#">Activity</Link>
+              <a className="nav-link" href="#">Activity</a>
             </li>
           </ul>
         </div>

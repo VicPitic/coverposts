@@ -19,8 +19,8 @@ const MyTeam = () => {
                     </div>
                     <div>
                         {/* icons */}
-                        <Link href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></Link>
-                        <Link href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></Link>
+                        <a href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></a>
+                        <a href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></a>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -35,8 +35,8 @@ const MyTeam = () => {
                     </div>
                     <div>
                         {/* icons */}
-                        <Link href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></Link>
-                        <Link href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></Link>
+                        <a href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></a>
+                        <a href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></a>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-4">
@@ -51,8 +51,8 @@ const MyTeam = () => {
                     </div>
                     <div>
                         {/* icons */}
-                        <Link href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></Link>
-                        <Link href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></Link>
+                        <a href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></a>
+                        <a href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></a>
                     </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
@@ -67,8 +67,8 @@ const MyTeam = () => {
                     </div>
                     <div>
                         {/* icons */}
-                        <Link href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></Link>
-                        <Link href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></Link>
+                        <a href="#" className="text-muted text-primary-hover me-3"><i className="fe fe-phone-call fs-4"></i></a>
+                        <a href="#" className="text-muted text-primary-hover"><i className="fe fe-video fs-4"></i></a>
                     </div>
                 </div>
             </Card.Body>

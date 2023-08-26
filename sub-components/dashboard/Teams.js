@@ -10,7 +10,7 @@ import TeamsData from "data/dashboard/TeamsData";
 const Teams = () => {
 
     const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-        (<Link
+        (<a
             href=""
             ref={ref}
             onClick={(e) => {
@@ -19,7 +19,7 @@ const Teams = () => {
             }}
             className="text-muted text-primary-hover">
             {children}
-        </Link>)
+        </a>)
     ));
 
     CustomToggle.displayName = 'CustomToggle';
