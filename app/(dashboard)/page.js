@@ -27,7 +27,7 @@ const Home = () => {
                         <div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <div className="mb-2 mb-lg-0">
-                                    <h3 className="mb-0  text-white">Projects</h3>
+                                    <h3 className="mb-0 text-white">🎉 Things are always better automated with <b>Coverposts</b></h3>
                                 </div>
                                 <div>
                                     <a href="/pages/post" className="btn btn-white">Create New Post</a>

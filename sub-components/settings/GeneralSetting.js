@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Col, Row, Form, Card, Button, Image } from 'react-bootstrap';
+import { Col, Row, Form, Card, Button, Image, Modal } from 'react-bootstrap';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import axios from 'axios';
 
 const GeneralSetting = () => {
@@ -8,6 +10,22 @@ const GeneralSetting = () => {
   const [blogUrl, setBlogUrl] = useState('');
   const [generatedPosts, setGeneratedPosts] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const customArrowStyles = {
+    position: 'absolute',
+    zIndex: 2,
+    top: 'calc(50% - 15px)', // Adjust as needed for vertical alignment
+    width: '50px',
+    height: '50px',
+    cursor: 'pointer',
+    background: 'transparent',
+    border: 'none',
+    outline: 'none',
+    fontSize: '2.5rem', // Adjust the size of the arrow icons
+    color: '#C58FFF', // Highlighted color for the arrows
+  };
 
   const handleGeneratePosts = async (e) => {
     e.preventDefault();
@@ -38,6 +56,11 @@ const GeneralSetting = () => {
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index);
+    setShowModal(true);
   };
 
   return (
@@ -106,14 +129,19 @@ const GeneralSetting = () => {
                 Generate Posts
               </Button>
             </Form>
+
+            <div className="mt-6">
+              <h4 className="mb-1"><b>Here are your generated posts:</b></h4>
+            </div>
+
             {/* Display generatedPosts */}
-            <div className="flex-container" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+            <div className="flex-container" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
               {generatedPosts.map((post, index) => (
-                <Card key={index} style={{ width: "18%", margin: "1%" }} className="rounded shadow mb-3">
+                <Card key={index} style={{ flex: '0 0 calc(20% - 2%)', margin: '1%' }} className="rounded shadow mb-3">
                   <Card.Body>
                     <p>{post}</p>
-                    <div style={{ position: "absolute", bottom: "10px", left: "10px" }}>
-                      <Button variant="primary" className="me-2" size="sm">
+                    <div style={{ position: 'absolute', bottom: '10px', left: '10px' }}>
+                      <Button variant="primary" className="me-2" size="sm" onClick={() => handleImageClick(index)}>
                         Add a picture 📷
                       </Button>
                       <Button variant="primary" size="sm">
@@ -124,15 +152,74 @@ const GeneralSetting = () => {
                 </Card>
               ))}
             </div>
-            <div className="image-grid">
-              {/* Display imageUrls */}
+            <div style={{ display: "none" }} className="image-grid">
               {imageUrls.map((imageUrl, index) => (
-                <Image key={index} src={imageUrl} alt={`Image ${index}`} fluid />
+                <Image
+                  key={index}
+                  src={imageUrl}
+                  alt={`Image ${index}`}
+                  fluid
+                  onClick={() => handleImageClick(index)}
+                />
               ))}
             </div>
           </Card.Body>
         </Card>
       </Col>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ color: "#C58FFF" }}>Pick an image scraped from the article:</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Carousel
+            selectedItem={selectedImageIndex}
+            sx={{ maxWidth: '600px', mx: 'auto', mb: '20px', height: 'auto' }} // Set modal dimension and image styles
+            renderArrowPrev={(onClickHandler, hasPrev, label) =>
+              hasPrev && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  title={label}
+                  style={{ ...customArrowStyles, left: '20px' }} // Adjust for left arrow
+                >
+                  &larr;
+                </button>
+              )
+            }
+            renderArrowNext={(onClickHandler, hasNext, label) =>
+              hasNext && (
+                <button
+                  type="button"
+                  onClick={onClickHandler}
+                  title={label}
+                  style={{ ...customArrowStyles, right: '20px' }} // Adjust for right arrow
+                >
+                  &rarr;
+                </button>
+              )
+            }
+          >
+            {imageUrls.map((imageUrl, index) => (
+              <div key={index}>
+                <Image
+                  src={imageUrl}
+                  alt={`Image ${index}`}
+                  fluid
+                  style={{ height: '100%', objectFit: 'contain' }} // Maintain aspect ratio
+                />
+              </div>
+            ))}
+          </Carousel>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary">
+            Select Image
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 };

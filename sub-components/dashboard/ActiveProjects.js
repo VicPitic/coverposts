@@ -11,14 +11,14 @@ const ActiveProjects = () => {
             <Col md={12} xs={12}>
                 <Card>
                     <Card.Header className="bg-white  py-4">
-                        <h4 className="mb-0">Active Projects</h4>
+                        <h4 className="mb-0">Your latest posts</h4>
                     </Card.Header>
                     <Table responsive className="text-nowrap mb-0">
                         <thead className="table-light">
                             <tr>
-                                <th>Project name</th>
-                                <th>Hours</th>
-                                <th>priority</th>
+                                <th>Article URL</th>
+                                <th>Post Length</th>
+                                <th>Social Channel</th>
                                 <th>Members</th>
                                 <th>Progress</th>
                             </tr>
