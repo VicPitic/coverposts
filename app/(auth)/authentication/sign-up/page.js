@@ -3,11 +3,50 @@
 // import node module libraries
 import { Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
 import Link from 'next/link';
+import { collection, addDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
 
 // import hooks
 import useMounted from 'hooks/useMounted';
 
 const SignUp = () => {
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+  
+    const username = event.target.username.value;
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+  
+    try {
+      // Create a new user with email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  
+      // You can access the newly created user with userCredential.user
+      const user = userCredential.user;
+  
+      // You can also update the user's profile with additional information
+      await updateProfile(auth.currentUser, {
+        displayName: username,
+      });
+  
+      // Add user data to Firestore
+      const userCollection = collection(db, "users"); // Assuming "users" is the name of your Firestore collection
+      await addDoc(userCollection, {
+        username: username,
+        email: email,
+        // Add any other user data you want to store in Firestore
+      });
+  
+      // Handle successful registration, e.g., redirect the user to another page
+      console.log("User registered successfully:", user);
+    } catch (error) {
+      // Handle errors during registration
+      console.error("Error registering user:", error.message);
+    }
+  };
+  
+  
   const hasMounted = useMounted();
   return (
     <Row className="align-items-center justify-content-center g-0 min-vh-100">
@@ -22,7 +61,7 @@ const SignUp = () => {
             </div>
             {/* Form */}
             {hasMounted &&
-              <Form>
+              <Form onSubmit={handleSignUp}>
                 {/* Username */}
                 <Form.Group className="mb-3" controlId="username">
                   <Form.Label>Username or email</Form.Label>

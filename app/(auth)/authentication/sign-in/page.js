@@ -1,14 +1,35 @@
 'use client'
 
-// import node module libraries
+// Import necessary modules and hooks
 import { Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
 import Link from 'next/link';
-
-// import hooks
+import { signInWithEmailAndPassword } from "firebase/auth"; // Import the signInWithEmailAndPassword function
+import { auth } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
 import useMounted from 'hooks/useMounted';
 
 const SignIn = () => {
+
+  // Function to handle user login
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+    
+    const email = event.target.username.value; // Assuming "username" is the email input
+    const password = event.target.password.value;
+  
+    try {
+      // Sign in the user with email and password
+      await signInWithEmailAndPassword(auth, email, password);
+      
+      // Handle successful login, e.g., redirect the user to another page
+      console.log("User logged in successfully");
+    } catch (error) {
+      // Handle login errors
+      console.error("Error logging in:", error.message);
+    }
+  };
   const hasMounted = useMounted();
+
+
   return (
     <Row className="align-items-center justify-content-center g-0 min-vh-100">
       <Col xxl={4} lg={6} md={8} xs={12} className="py-8 py-xl-0">
@@ -22,11 +43,11 @@ const SignIn = () => {
             </div>
             {/* Form */}
             {hasMounted &&
-              <Form>
-                {/* Username */}
+              <Form onSubmit={handleSignIn}>
+                {/* Username (email) */}
                 <Form.Group className="mb-3" controlId="username">
                   <Form.Label>Username or email</Form.Label>
-                  <Form.Control type="email" name="username" placeholder="Enter address here" required="" />
+                  <Form.Control type="email" name="username" placeholder="Enter email here" required="" />
                 </Form.Group>
 
                 {/* Password */}
@@ -42,6 +63,7 @@ const SignIn = () => {
                     <Form.Check.Label>Remember me</Form.Check.Label>
                   </Form.Check>
                 </div>
+
                 <div>
                   {/* Button */}
                   <div className="d-grid">
@@ -56,15 +78,13 @@ const SignIn = () => {
                     </div>
                   </div>
                 </div>
-              </Form>}
-
-
+              </Form>
+            }
           </Card.Body>
         </Card>
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-
-export default SignIn
+export default SignIn;
