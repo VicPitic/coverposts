@@ -1,6 +1,6 @@
 // import node module libraries
 import Link from 'next/link';
-import { ProgressBar, Col, Row, Card, Table, Image } from 'react-bootstrap';
+import { ProgressBar, Col, Row, Card, Table, Image, Button } from 'react-bootstrap';
 
 // import required data files
 import ActiveProjectsData from "data/dashboard/ActiveProjectsData";
@@ -19,8 +19,8 @@ const ActiveProjects = () => {
                                 <th>Article URL</th>
                                 <th>Post Length</th>
                                 <th>Social Channel</th>
-                                <th>Members</th>
-                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,7 +41,6 @@ const ActiveProjects = () => {
                                             </div>
                                         </td>
                                         <td className="align-middle">{item.hours}</td>
-                                        <td className="align-middle"><span className={`badge bg-${item.priorityBadgeBg}`}>{item.priority}</span></td>
                                         <td className="align-middle">
                                             <div className="avatar-group">
                                                 {item.members.map((avatar, avatarIndex) => {
@@ -56,10 +55,12 @@ const ActiveProjects = () => {
                                                 </span>
                                             </div>
                                         </td>
+                                        <td className="align-middle"><span className={`badge bg-${item.priorityBadgeBg}`}>{item.priority}</span></td>
                                         <td className="align-middle text-dark">
-                                            <div className="float-start me-3">{item.progress}%</div>
                                             <div className="mt-2">
-                                                <ProgressBar now={item.progress} style={{ height: '5px' }} />
+                                                <Button variant="primary" size="sm">
+                                                    View post 🚀
+                                                </Button>
                                             </div>
                                         </td>
                                     </tr>
