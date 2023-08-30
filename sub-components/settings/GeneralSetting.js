@@ -4,6 +4,12 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Swal from 'sweetalert2';
 import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { collection, addDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from '../../firebase'; // Import the Firebase auth object from your firebase.js
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import firebase from 'firebase/compat/app';
 import axios from 'axios';
 
 const GeneralSetting = () => {
@@ -20,6 +26,8 @@ const GeneralSetting = () => {
 
   const [showPostPreview, setShowPostPreview] = useState(false); // New state variable
   const [selectedPost, setSelectedPost] = useState(null); // New state variable
+
+  const [userId, setUserId] = useState()
 
   const customArrowStyles = {
     position: 'absolute',
@@ -51,6 +59,31 @@ const GeneralSetting = () => {
     }
   };
 
+
+
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, you can access the user's properties
+        const userId = user.uid;
+        console.log('User ID:', userId);
+        setUserId(userId); // Set the user ID in the component state
+        // Now you have the user's ID (userId) which you can use in your code
+        // Call your `generatePosts` function or perform any other actions you need with the user's ID here.
+      } else {
+        // No user is signed in or the user's session has expired.
+        console.log('No user signed in.');
+      }
+    });
+
+    // Cleanup the subscription when the component unmounts
+
+  }, []); // The empty array as the second argument makes this effect run only once on component mount
+
+
+
+
   const handleGeneratePosts = async (e) => {
     e.preventDefault();
 
@@ -65,6 +98,7 @@ const GeneralSetting = () => {
         const data = response.data;
         setGeneratedPosts(data);
 
+
         // Scrape images for the provided blog URL
         const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
           blog_url: blogUrl
@@ -73,7 +107,37 @@ const GeneralSetting = () => {
         if (scrapeResponse.status === 200) {
           const images = scrapeResponse.data;
           setImageUrls(images);
+
+          // Add the data to Firestore here
+          if (userId && data && images) {
+            try {
+              console.log(userId)
+              const userPostsRef = collection(db, 'users', userId, 'posts');
+              const batch = [];
+
+              // Loop through generatedPosts and imageUrls to create batched Firestore writes
+              for (let i = 0; i < Math.min(data.length, images.length); i++) {
+                const post = data[i];
+                const imageUrl = images[i];
+
+                const postDoc = {
+                  text: post,
+                  imageUrl: imageUrl,
+                  timestamp: new Date(),
+                };
+
+                batch.push(addDoc(userPostsRef, postDoc));
+              }
+
+              // Commit the batched writes
+              await Promise.all(batch);
+              console.log('Data added to Firestore');
+            } catch (error) {
+              console.error('Error adding data to Firestore:', error);
+            }
+          }
         }
+
       } else {
         console.error('Error generating posts');
       }
