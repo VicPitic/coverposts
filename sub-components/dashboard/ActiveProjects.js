@@ -2,10 +2,61 @@
 import Link from 'next/link';
 import { ProgressBar, Col, Row, Card, Table, Image, Button } from 'react-bootstrap';
 
-// import required data files
-import ActiveProjectsData from "data/dashboard/ActiveProjectsData";
+import { useEffect, useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { db, auth } from '../../firebase'; // Import the Firebase auth object from your firebase.js
+import {
+    query as firestoreQuery,
+    where,
+    orderBy,
+    limit,
+    getDocs,
+} from 'firebase/firestore'; // Import necessary Firestore functions
 
 const ActiveProjects = () => {
+    const [userId, setUserId] = useState(null);
+    const [lastFivePosts, setLastFivePosts] = useState([]); // State to store the last 5 posts
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userId = user.uid;
+                console.log('User ID:', userId);
+                setUserId(userId);
+
+                // Fetch the last 5 posts for the user
+                try {
+                    const userPostsRef = collection(db, 'users', userId, 'posts'); // Path to user's posts
+                    const query = firestoreQuery(
+                        userPostsRef,
+                        orderBy('timestamp', 'desc'),
+                        limit(5)
+                    );
+                    const querySnapshot = await getDocs(query);
+
+                    const posts = [];
+                    querySnapshot.forEach((doc) => {
+                        // Assuming your posts have a 'text' field, update this to match your data structure
+                        const postData = doc.data();
+                        posts.push(postData);
+
+                    });
+
+                    // Set the last 5 posts in the state
+                    setLastFivePosts(posts);
+                    console.log(posts)
+                } catch (error) {
+                    console.error('Error fetching posts:', error);
+                }
+            } else {
+                console.log('No user signed in.');
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     return (
         <Row className="mt-6">
             <Col md={12} xs={12}>
@@ -18,63 +69,40 @@ const ActiveProjects = () => {
                             <tr>
                                 <th>Article URL</th>
                                 <th>Post Length</th>
-                                <th>Social Channel</th>
-                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {ActiveProjectsData.map((item, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td className="align-middle">
-                                            <div className="d-flex align-items-center">
-                                                <div>
-                                                    <div className={`icon-shape icon-md border p-4 rounded-1 ${item.brandLogoBg}`}>
-                                                        <Image src={item.brandLogo} alt="" />
-                                                    </div>
-                                                </div>
-                                                <div className="ms-3 lh-1">
-                                                    <h5 className=" mb-1">
-                                                        <a href="#" className="text-inherit">{item.projectName}</a></h5>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="align-middle">{item.hours}</td>
-                                        <td className="align-middle">
-                                            <div className="avatar-group">
-                                                {item.members.map((avatar, avatarIndex) => {
-                                                    return (
-                                                        <span className="avatar avatar-sm" key={avatarIndex}>
-                                                            <Image alt="avatar" src={avatar.image} className="rounded-circle" />
-                                                        </span>
-                                                    )
-                                                })}
-                                                <span className="avatar avatar-sm avatar-primary">
-                                                    <span className="avatar-initials rounded-circle fs-6">+5</span>
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td className="align-middle"><span className={`badge bg-${item.priorityBadgeBg}`}>{item.priority}</span></td>
-                                        <td className="align-middle text-dark">
-                                            <div className="mt-2">
-                                                <Button variant="primary" size="sm">
-                                                    View post 🚀
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
+                            {lastFivePosts.map((post, index) => (
+                                <tr key={index}>
+                                    <td className="align-middle">
+                                    <img src={post.imageUrl} height={100} width={150} alt="Post Image" />
+                                          
+                              
+                                    </td>
+                                    <td className="align-middle">
+                                        {post.text.length > 60 ? `${post.text.substring(0, 60)}...` : post.text}
+                                    </td>
+                                    <td className="align-middle text-dark">
+                                        <div className="mt-2">
+                                            <Button variant="primary" size="sm">
+                                                View post 🚀
+                                            </Button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                     <Card.Footer className="bg-white text-center">
-                        <a href="#" className="link-primary">View All Projects</a>
+                        <a href="#" className="link-primary">
+                            View All Projects
+                        </a>
                     </Card.Footer>
                 </Card>
             </Col>
         </Row>
-    )
-}
+    );
+};
 
-export default ActiveProjects
+export default ActiveProjects;
