@@ -3,6 +3,7 @@ import { Col, Row, Form, Card, Button, Image, Modal } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Swal from 'sweetalert2';
+import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
 const GeneralSetting = () => {
@@ -54,7 +55,7 @@ const GeneralSetting = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/generate_posts', {
+      const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
         social_platform: socialPlatform,
         post_length: postLength,
         blog_url: blogUrl
@@ -65,7 +66,7 @@ const GeneralSetting = () => {
         setGeneratedPosts(data);
 
         // Scrape images for the provided blog URL
-        const scrapeResponse = await axios.post('http://127.0.0.1:5000/scrape_images', {
+        const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
           blog_url: blogUrl
         });
 
@@ -118,6 +119,7 @@ const GeneralSetting = () => {
 
   return (
     <Row className="mb-8">
+      <Toaster />
       <Col xl={12} lg={12} md={12} xs={12}>
         <Card>
           <Card.Body>
@@ -141,6 +143,8 @@ const GeneralSetting = () => {
                     <option value="Twitter">Twitter</option>
                     <option value="Facebook">Facebook</option>
                     <option value="Instagram">Instagram</option>
+                    <option value="Reddit">Reddit</option>
+                    <option value="LinkedIn">LinkedIn</option>
                     {/* Add more platform options here */}
                   </Form.Control>
                 </Col>
@@ -158,9 +162,9 @@ const GeneralSetting = () => {
                     required
                   >
                     <option value="">Select post length</option>
-                    <option value="short">Short</option>
-                    <option value="medium">Medium</option>
-                    <option value="long">Long</option>
+                    <option value="short">Short (50-150 words)</option>
+                    <option value="medium">Medium (150 - 300 words)</option>
+                    <option value="long">Long (300+ words)</option>
                   </Form.Control>
                 </Col>
               </Row>
@@ -264,7 +268,11 @@ const GeneralSetting = () => {
             {imageUrls.map((imageUrl, index) => (
               <div
                 key={index}
-                onClick={() => setSelectedImageIndex(index)}
+                onClick={() => {
+                  setSelectedImageIndex(index); toast('Good Job! You selected a picture for your post', {
+                    icon: '👏',
+                  });
+                }}
                 onMouseEnter={() => setIsImageHovered(true)} // Set hover state
                 onMouseLeave={() => setIsImageHovered(false)} // Set hover state
                 style={{ position: 'relative', cursor: 'pointer' }}
