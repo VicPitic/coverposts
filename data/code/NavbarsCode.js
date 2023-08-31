@@ -33,7 +33,7 @@ export const ColorSchemesCode = `
 <Navbar bg="dark" variant="dark">
     <Container>
         <Navbar.Brand href="#home">
-            <Image src="/images/brand/logo/logo.svg" alt="" loading="lazy" />
+            <Image src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" alt="" loading="lazy" />
         </Navbar.Brand>
         <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>
@@ -45,7 +45,7 @@ export const ColorSchemesCode = `
 <br />
 <Navbar bg="primary" variant="dark">
     <Container>
-        <Navbar.Brand href="#home"> <Image src="/images/brand/logo/logo.svg" alt="" loading="lazy" /></Navbar.Brand>
+        <Navbar.Brand href="#home"> <Image src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" alt="" loading="lazy" /></Navbar.Brand>
         <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>
@@ -56,7 +56,7 @@ export const ColorSchemesCode = `
 <br />
 <Navbar bg="light" variant="light">
     <Container>
-        <Navbar.Brand href="#home"> <Image src="/images/brand/logo/logo.svg" alt="" loading="lazy" /></Navbar.Brand>
+        <Navbar.Brand href="#home"> <Image src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" alt="" loading="lazy" /></Navbar.Brand>
         <Nav className="me-auto">
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>

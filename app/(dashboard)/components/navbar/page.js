@@ -14,7 +14,7 @@ import {
 } from 'react-bootstrap';
 
 // import widget/custom components
-import { HighlightCode }  from 'widgets';
+import { HighlightCode } from 'widgets';
 
 // import data files
 import {
@@ -192,12 +192,12 @@ const Navbars = () => {
 							<Card.Body className="p-0">
 								<Tab.Content>
 									<Tab.Pane eventKey="all" className="pb-4 p-4">
-										
+
 										<Navbar bg="dark" variant="dark">
 											<Container>
 												<Navbar.Brand href="#home">
 													{' '}
-													<Image src="/images/brand/logo/logo.svg" alt="" loading="lazy" />
+													<Image src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" alt="" loading="lazy" />
 												</Navbar.Brand>
 												<Nav className="me-auto">
 													<Nav.Link href="#home">Home</Nav.Link>
@@ -211,7 +211,7 @@ const Navbars = () => {
 											<Container>
 												<Navbar.Brand href="#home">
 													{' '}
-													<Image src="/images/brand/logo/logo.svg" alt="" loading="lazy" />
+													<Image src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" alt="" loading="lazy" />
 												</Navbar.Brand>
 												<Nav className="me-auto">
 													<Nav.Link href="#home">Home</Nav.Link>

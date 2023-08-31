@@ -10,9 +10,9 @@ const Documentation = () => {
         <Col lg={12} md={12} sm={12}>
           <div className="border-bottom pb-4 mb-4 d-md-flex justify-content-between align-items-center">
             <div className="mb-3 mb-md-0">
-              <h1 className="mb-0 h2 fw-bold">Dash UI NextJS</h1>
+              <h1 className="mb-0 h2 fw-bold">Coverposts NextJS</h1>
               <p className="mb-0">
-                Welcome to the Dash UI NextJS version of the original Dash UI theme.
+                Welcome to the Coverposts NextJS version of the original Coverposts theme.
               </p>
             </div>
           </div>
@@ -24,13 +24,13 @@ const Documentation = () => {
             <Card.Body>
               <h2 className="fw-bold">Getting Started</h2>
               <p className="lead">
-                A professional Dash UI NextJS Kit that comes with plenty of
+                A professional Coverposts NextJS Kit that comes with plenty of
                 ready-to-use components that will help you to build more
                 beautiful application (web app).
               </p>
 
               <p>
-                Dash UI Kit is built with the most popular front-end framework{' '}
+                Coverposts Kit is built with the most popular front-end framework{' '}
                 <a
                   href="https://react-bootstrap.github.io/"
                   target="_blank"
@@ -41,7 +41,7 @@ const Documentation = () => {
                 with react-scripts.
               </p>
               <p>
-                This doc will guide you to understand how Dash UI-NextJS theme is
+                This doc will guide you to understand how Coverposts-NextJS theme is
                 organized, basics of how to customize, and how to compile from
                 the source code if you want.
               </p>
@@ -70,7 +70,7 @@ const Documentation = () => {
                 </li>
                 <li>
                   {' '}
-                  <h4 className="mb-0 fw-bold">Install Dash UI NextJS</h4>
+                  <h4 className="mb-0 fw-bold">Install Coverposts NextJS</h4>
                   <p>
                     Open the <span>dashui-free-nextjs-admin-template </span>directory with your cmd
                     or terminal. Open the project folder and install its
@@ -84,7 +84,7 @@ const Documentation = () => {
                   </pre>
                   <p>
                     This command will download all the necessary dependencies
-                    for dash UI in the node_modules directory.
+                    for Coverposts in the node_modules directory.
                   </p>
                 </li>
                 <li>

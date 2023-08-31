@@ -99,7 +99,8 @@ const NavbarVertical = (props) => {
 			<SimpleBar style={{ maxHeight: '100vh' }}>
 				<div className="nav-scroller">
 					<a href="/" className="navbar-brand">
-						<Image src="/images/brand/logo/logo.svg" alt="" />
+						<Image src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" alt="" />
+						Coverposts
 					</a>
 				</div>
 				{/* Dashboard Menu */}
@@ -215,7 +216,7 @@ const NavbarVertical = (props) => {
 								return (
 									<Card bsPrefix="nav-item" key={index}>
 										{/* menu item without any childern items like Documentation and Changelog items*/}
-										<a href={menu.link} className={`nav-link ${location === menu.link ? 'active' : ''} ${menu.title === 'Download' ? 'bg-primary text-white' : ''}`}>
+										<a href={menu.link} className={`nav-link ${location === menu.link ? 'active' : ''} ${menu.title === 'Get more credits' ? 'bg-secondary text-white' : ''}`}>
 											{typeof menu.icon === 'string' ? (
 												<i className={`nav-icon fe fe-${menu.icon} me-2`}></i>
 											) : (menu.icon)}

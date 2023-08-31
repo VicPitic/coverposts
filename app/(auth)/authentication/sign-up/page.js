@@ -13,23 +13,23 @@ import useMounted from 'hooks/useMounted';
 const SignUp = () => {
   const handleSignUp = async (event) => {
     event.preventDefault();
-  
+
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-  
+
     try {
       // Create a new user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  
+
       // You can access the newly created user with userCredential.user
       const user = userCredential.user;
-  
+
       // You can also update the user's profile with additional information
       await updateProfile(auth.currentUser, {
         displayName: username,
       });
-  
+
       // Add user data to Firestore
       const userCollection = collection(db, "users"); // Assuming "users" is the name of your Firestore collection
       await addDoc(userCollection, {
@@ -37,16 +37,18 @@ const SignUp = () => {
         email: email,
         // Add any other user data you want to store in Firestore
       });
-  
+
       // Handle successful registration, e.g., redirect the user to another page
       console.log("User registered successfully:", user);
+
+      location = "./"
     } catch (error) {
       // Handle errors during registration
       console.error("Error registering user:", error.message);
     }
   };
-  
-  
+
+
   const hasMounted = useMounted();
   return (
     <Row className="align-items-center justify-content-center g-0 min-vh-100">
