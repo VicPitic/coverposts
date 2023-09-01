@@ -34,8 +34,13 @@ const QuickMenu = () => {
         query: '(min-width: 1224px)'
     })
 
+    const centerHorizontally = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
 
-  
+
     const [userCredits, setUserCredits] = useState(null);
     useEffect(() => {
         const auth = getAuth();
@@ -107,9 +112,9 @@ const QuickMenu = () => {
         }
       `;
         return (
-            <ListGroup as="ul" bsPrefix='navbar-nav' className="navbar-right-wrap ms-auto d-flex nav-top-wrap">
-        <Chip label={"Remaining Credits: " + userCredits} />
-                                <Dropdown as="li" className="ms-2">
+            <ListGroup as="ul" bsPrefix='navbar-nav' className={`navbar-right-wrap ms-auto d-flex nav-top-wrap ${centerHorizontally}`}>
+                <Chip style={{ marginTop: "5px" }} label={"Remaining Credits: " + userCredits} />
+                <Dropdown as="li" className="ms-2">
                     <Dropdown.Toggle
                         as="a"
                         bsPrefix=' '

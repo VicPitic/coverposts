@@ -12,14 +12,14 @@ const SignIn = () => {
   // Function to handle user login
   const handleSignIn = async (event) => {
     event.preventDefault();
-    
+
     const email = event.target.username.value; // Assuming "username" is the email input
     const password = event.target.password.value;
-  
+
     try {
       // Sign in the user with email and password
       await signInWithEmailAndPassword(auth, email, password);
-      
+
       // Handle successful login, e.g., redirect the user to another page
       console.log("User logged in successfully");
     } catch (error) {
@@ -38,8 +38,10 @@ const SignIn = () => {
           {/* Card body */}
           <Card.Body className="p-6">
             <div className="mb-4">
-              <a href="/"><Image src="/images/brand/logo/logo-primary.svg" className="mb-2" alt="" /></a>
-              <p className="mb-6">Please enter your user information.</p>
+              <center>
+                <a href="/"><Image style={{ width: "100px" }} src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" className="mb-2" alt="" /></a>
+              </center>
+              <p className="mb-6">Automate your content flywheel with <b>Coverposts</b></p>
             </div>
             {/* Form */}
             {hasMounted &&
