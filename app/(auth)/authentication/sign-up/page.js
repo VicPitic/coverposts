@@ -35,6 +35,7 @@ const SignUp = () => {
       await addDoc(userCollection, {
         username: username,
         email: email,
+        credits: 3
         // Add any other user data you want to store in Firestore
       });
 
