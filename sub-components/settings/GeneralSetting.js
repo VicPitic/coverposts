@@ -5,10 +5,13 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Swal from 'sweetalert2';
 import toast, { Toaster } from 'react-hot-toast';
 import { useEffect } from 'react';
+import { doc, updateDoc, getDoc } from 'firebase/firestore'; // Import Firestore functions
 import { collection, addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from '../../firebase'; // Import the Firebase auth object from your firebase.js
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { css } from '@emotion/react'; // Import css for styling the spinner
+import { SyncLoader } from 'react-spinners';
 import firebase from 'firebase/compat/app';
 import axios from 'axios';
 
@@ -19,15 +22,24 @@ const GeneralSetting = () => {
   const [generatedPosts, setGeneratedPosts] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [isImageHovered, setIsImageHovered] = useState(false); // Track hover state
-
+  const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedPostIndex, setSelectedPostIndex] = useState(0); // Add this state variable
+  const [selectedPostIndex, setSelectedPostIndex] = useState(0);
+  const [showPostPreview, setShowPostPreview] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [userId, setUserId] = useState();
+  const [userCredits, setUserCredits] = useState(null);
 
-  const [showPostPreview, setShowPostPreview] = useState(false); // New state variable
-  const [selectedPost, setSelectedPost] = useState(null); // New state variable
+  // Add a state variable to track the loading state
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [userId, setUserId] = useState()
+  // Define a CSS override for the spinner
+  const spinnerStyle = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red; // Customize the spinner color
+  `;
+
 
   const customArrowStyles = {
     position: 'absolute',
@@ -63,88 +75,119 @@ const GeneralSetting = () => {
 
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // User is signed in, you can access the user's properties
         const userId = user.uid;
         console.log('User ID:', userId);
-        setUserId(userId); // Set the user ID in the component state
-        // Now you have the user's ID (userId) which you can use in your code
-        // Call your `generatePosts` function or perform any other actions you need with the user's ID here.
+        setUserId(userId);
+
+        // Fetch the user's credits from Firestore
+        try {
+          const userDocRef = doc(db, 'users', userId);
+          const userDocSnap = await getDoc(userDocRef);
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            const credits = userData.credits || 0; // Use 0 as the default value if credits field doesn't exist
+            setUserCredits(credits);
+          }
+        } catch (error) {
+          console.error('Error fetching user credits:', error);
+        }
       } else {
-        // No user is signed in or the user's session has expired.
         console.log('No user signed in.');
       }
     });
-
-    // Cleanup the subscription when the component unmounts
-
-  }, []); // The empty array as the second argument makes this effect run only once on component mount
+  }, []);
 
 
 
 
   const handleGeneratePosts = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
-        social_platform: socialPlatform,
-        post_length: postLength,
-        blog_url: blogUrl
-      });
-
-      if (response.status === 200) {
-        const data = response.data;
-        setGeneratedPosts(data);
-
-
-        // Scrape images for the provided blog URL
-        const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
+  
+    if (userCredits > 0) {
+      // Decrement the user's credits
+      const updatedCredits = userCredits - 1;
+  
+      try {
+        // Update the credits in Firestore
+        const userDocRef = doc(db, 'users', userId);
+        await updateDoc(userDocRef, { credits: updatedCredits });
+  
+        // Set isLoading to true when starting the generation process
+        setIsLoading(true);
+  
+        const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
+          social_platform: socialPlatform,
+          post_length: postLength,
           blog_url: blogUrl
         });
-
-        if (scrapeResponse.status === 200) {
-          const images = scrapeResponse.data;
-          setImageUrls(images);
-
-          // Add the data to Firestore here
-          if (userId && data && images) {
-            try {
-              console.log(userId)
-              const userPostsRef = collection(db, 'users', userId, 'posts');
-              const batch = [];
-
-              // Loop through generatedPosts and imageUrls to create batched Firestore writes
-              for (let i = 0; i < Math.min(data.length, images.length); i++) {
-                const post = data[i];
-                const imageUrl = images[i];
-
-                const postDoc = {
-                  text: post,
-                  imageUrl: imageUrl,
-                  timestamp: new Date(),
-                };
-
-                batch.push(addDoc(userPostsRef, postDoc));
+  
+        if (response.status === 200) {
+          const data = response.data;
+          setGeneratedPosts(data);
+  
+         
+          // Scrape images for the provided blog URL
+          const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
+            blog_url: blogUrl
+          });
+  
+          if (scrapeResponse.status === 200) {
+            const images = scrapeResponse.data;
+            setImageUrls(images);
+  
+            // Add the data to Firestore here
+            if (userId && data && images) {
+              try {
+                console.log(userId)
+                const userPostsRef = collection(db, 'users', userId, 'posts');
+                const batch = [];
+  
+                // Loop through generatedPosts and imageUrls to create batched Firestore writes
+                for (let i = 0; i < Math.min(data.length, images.length); i++) {
+                  const post = data[i];
+                  const imageUrl = images[i];
+  
+                  const postDoc = {
+                    text: post,
+                    imageUrl: imageUrl,
+                    timestamp: new Date(),
+                  };
+  
+                  batch.push(addDoc(userPostsRef, postDoc));
+                }
+  
+                // Commit the batched writes
+                await Promise.all(batch);
+                console.log('Data added to Firestore');
+              } catch (error) {
+                console.error('Error adding data to Firestore:', error);
               }
-
-              // Commit the batched writes
-              await Promise.all(batch);
-              console.log('Data added to Firestore');
-            } catch (error) {
-              console.error('Error adding data to Firestore:', error);
             }
           }
+  
+  
+        } else {
+          console.error('Error generating posts');
         }
-
-      } else {
-        console.error('Error generating posts');
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        // Set isLoading to false when the generation process is completed (whether it succeeded or failed)
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } else {
+      // Handle the case where the user doesn't have enough credits
+      toast('Not enough credits', {
+        icon: '☹️',
+      });
     }
   };
+  
+
+      
+  
 
   const handleImageClick = (index) => {
     setSelectedPostIndex(index); // Store the index of the clicked card
@@ -246,9 +289,16 @@ const GeneralSetting = () => {
                   />
                 </Col>
               </Row>
-              <Button variant="primary" type="submit">
+
+              {isLoading ? (
+                <div className="text-center">
+                  <SyncLoader css={spinnerStyle} size={10} color={'#C58FFF'} loading={isLoading} />
+                </div>
+              ) : (
+                <Button variant="primary" type="submit">
                 Generate Posts
               </Button>
+              )}
             </Form>
 
             <div className="mt-6">

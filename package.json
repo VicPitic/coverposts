@@ -29,6 +29,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
     "@vercel/analytics": "^1.0.1",
     "apexcharts": "^3.41.1",
     "axios": "^1.4.0",
@@ -50,6 +51,7 @@
     "react-hot-toast": "^2.4.1",
     "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.23",
+    "react-spinners": "^0.13.8",
     "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.64.2",
     "sass-loader": "^13.3.2",
