@@ -63,6 +63,7 @@ const QuickMenu = () => {
             } else {
                 // No user is signed in or the user's session has expired.
                 setUserCredits(null); // Reset userCredits if no user is signed in
+                window.location.href="/authentication/sign-in"
             }
         });
 
