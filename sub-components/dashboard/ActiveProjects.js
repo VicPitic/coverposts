@@ -20,6 +20,7 @@ const ActiveProjects = () => {
 
     const [showPostPreview, setShowPostPreview] = useState(false); // New state variable
     const [selectedPost, setSelectedPost] = useState(null); // New state variable
+    const [isHomePage, setIsHomePage] = useState(null); // New state variable
 
     const socialMediaShareOptions = [
         { platform: 'facebook', label: 'Facebook', icon: 'facebook', shareUrl: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedPost?.picture || "")}` },
@@ -56,11 +57,12 @@ const ActiveProjects = () => {
 
                 // Fetch the last 5 posts for the user
                 try {
+                    setIsHomePage(window.location.href.includes("pages"));
                     const userPostsRef = collection(db, 'users', userId, 'posts'); // Path to user's posts
                     const query = firestoreQuery(
                         userPostsRef,
                         orderBy('timestamp', 'desc'),
-                        limit(5)
+                        window.location.href.includes("pages") ? limit(Infinity) : limit(5)
                     );
                     const querySnapshot = await getDocs(query);
 
@@ -128,9 +130,15 @@ const ActiveProjects = () => {
                         </tbody>
                     </Table>
                     <Card.Footer className="bg-white text-center">
-                        <a href="/pages/post" className="link-primary">
-                            + Create new posts
-                        </a>
+                        {isHomePage ? (
+                            <a href="/pages/post" className="link-primary">
+                                + Create new posts
+                            </a>
+                        ) : (
+                            <a href="/pages/posts" className="link-primary">
+                                View all posts
+                            </a>
+                        )}
                     </Card.Footer>
                 </Card>
             </Col>

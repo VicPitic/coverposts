@@ -22,6 +22,7 @@ const SignIn = () => {
 
       // Handle successful login, e.g., redirect the user to another page
       console.log("User logged in successfully");
+      location = "/"
     } catch (error) {
       // Handle login errors
       console.error("Error logging in:", error.message);

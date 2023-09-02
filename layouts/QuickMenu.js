@@ -1,5 +1,6 @@
 // import node module libraries
 import Link from 'next/link';
+
 import { Fragment } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import {
@@ -8,13 +9,15 @@ import {
     Image,
     Dropdown,
     ListGroup,
+    Modal,
+    Button
 } from 'react-bootstrap';
 import { css } from '@emotion/react'; // Import Emotion's css function
 import Chip from '@mui/material/Chip';
 import { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase'; // Import your Firebase configuration
+import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
+import { db, app } from '../firebase'; // Import your Firebase configuration
 
 // simple bar scrolling used for notification item scrolling
 import SimpleBar from 'simplebar-react';
@@ -25,10 +28,47 @@ import NotificationList from 'data/Notification';
 
 // import hooks
 import useMounted from 'hooks/useMounted';
+import axios from 'axios';
 
 const QuickMenu = () => {
 
     const hasMounted = useMounted();
+    const [showModal, setShowModal] = useState(false);
+
+    // Event handler to handle the Axios POST request for Starter Package
+    const handleSelectStarter = () => {
+        axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
+            const { url } = response.data;
+            console.log(url);
+            window.location = url;
+        }).catch(err => {
+            toast.error(result)
+            console.log(err.message);
+        })
+    };
+
+    // Event handler to handle the Axios POST request for Premium Package
+    const handleSelectPremium = () => {
+        // Make an Axios POST request to your desired endpoint
+        axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
+            const { url } = response.data;
+            console.log(url);
+            window.location = url;
+        }).catch(err => {
+            toast.error(result)
+            console.log(err.message);
+        })
+    };
+
+    // Step 3: Event handler to show the modal
+    const handleShowModal = () => {
+        setShowModal(true);
+    };
+
+    // Event handler to hide the modal
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
 
     const isDesktop = useMediaQuery({
         query: '(min-width: 1224px)'
@@ -40,7 +80,116 @@ const QuickMenu = () => {
     align-items: center;
   `;
 
+    const ModalContent = (
+        <Modal show={showModal} onHide={handleCloseModal} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>You are out of credits. Select a plan</Modal.Title>
+            </Modal.Header>
 
+            <Modal.Body>
+                <div className="d-flex flex-wrap justify-between">
+                    {/* Pricing Option 1 */}
+                    <div className="flex-grow-1 m-2 text-primary-900">
+                        <div className="w-72 mx-auto bg-white-600/20 p-4 flex flex-col justify-between">
+                            <div>
+                                <center>
+                                    <img
+                                        src="https://ucarecdn.com/f20e2e0e-fbdc-4b40-ba42-f15357b624e2/12.png"
+                                        alt="Customizable Layouts image used."
+                                        className="mx-auto"
+                                    />
+                                </center>
+                                <h2 className="text-center text-black text-2xl font-bold mt-4">
+                                    ✏️ Starter Package
+                                </h2>
+                                <ul className="text-gray-600 mb-4">
+                                    <li>✅ Up to 20 credits/month</li>
+                                    <li>✅ Without a watermark</li>
+                                    <li>✅ Share posts on the biggest social media platforms</li>
+                                    <li>✅ Posts include illustrations based on the article</li>
+                                    <li>✅ Saved posts history</li>
+                                </ul>
+                            </div>
+                            <div className="text-center">
+                                <span className="text-2xl font-semibold">$10/month</span>
+                            </div>
+                            <div className="text-center mt-2">
+                                <Button onClick={handleSelectStarter} variant="primary">Select</Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pricing Option 2 */}
+                    <div className="flex-grow-1 m-2 text-primary-900">
+                        <div className="w-72 mx-auto bg-white-600/20 p-4 flex flex-col justify-between">
+                            <div>
+                                <center>
+                                    <img
+                                        src="https://ucarecdn.com/ce399912-445f-4692-b176-cc3866db557c/13.png"
+                                        alt="Customizable Layouts image used."
+                                        className="mx-auto"
+                                    />
+                                </center>
+                                <h2 className="text-center text-black text-2xl font-bold mt-4">
+                                    💎 Premium Package
+                                </h2>
+                                <ul className="text-gray-600 mb-4">
+                                    <li>✅ Unlimited credits</li>
+                                    <li>✅ Without a watermark</li>
+                                    <li>✅ Share posts on the biggest social media platforms</li>
+                                    <li>✅ Posts include illustrations based on the article</li>
+                                    <li>✅ Saved posts history</li>
+                                    <li>✅ Multiple post customization options</li>
+                                </ul>
+                            </div>
+                            <div className="text-center">
+                                <span className="text-2xl font-semibold">$40/month</span>
+                            </div>
+                            <div className="text-center mt-2">
+                                <Button onClick={handleSelectPremium} variant="primary">Select</Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pricing Option 3 */}
+                    <div className="flex-grow-1 m-2 text-primary-900">
+                        <div className="w-72 mx-auto bg-white-600/20 p-4 flex flex-col justify-between">
+                            <div>
+                                <center>
+                                    <img
+                                        src="https://ucarecdn.com/0433bcc6-008f-4d0b-af1c-791e9360017c/14.png"
+                                        alt="Automated Content Flywheel image used."
+                                        className="mx-auto"
+                                    />
+                                </center>
+                                <h2 className="text-center text-black text-2xl font-bold mt-4">
+                                    🦄 Enterprise Package
+                                </h2>
+                                <ul className="text-gray-600 mb-4">
+                                    <li>⭐️ Automated content flywheel implementation using Coverpost's AI automated systems</li>
+                                    <li>⭐️ Automatically grabs your chosen blog content from various sources</li>
+                                    <li>⭐️ Automatically creates posts</li>
+                                    <li>⭐️ Automatically distributes these posts to your social media profiles</li>
+                                </ul>
+                            </div>
+                            <div className="text-center">
+                                <span className="text-2xl font-semibold">Custom price</span>
+                            </div>
+                            <div className="text-center mt-2">
+                                <Button className="btn btn--purple" variant="primary">Contact Us</Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+
+    );
     const [userCredits, setUserCredits] = useState(null);
     useEffect(() => {
         const auth = getAuth();
@@ -50,6 +199,24 @@ const QuickMenu = () => {
             if (user) {
                 // User is signed in, you can access the user's properties
                 const userId = user.uid;
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get("session_id");
+
+                if (sessionId) {
+                    axios.get(`https://coverpostsbillingapi.onrender.com/api/check-subscription?id=${sessionId}`).then(response => {
+
+                        //Check Stripe Session
+                        const db = getFirestore(app);
+                        if (response.data.status == "complete") {
+                            const userDoc = doc(db, "users", userId);
+                            updateDoc(userDoc, { session_id: sessionId, subscription: "PAID" });
+                        }
+
+                    }).catch(err => {
+                        console.log(err.message);
+                    })
+
+                }
 
                 // Retrieve the user's credits from Firestore
                 const userDocRef = doc(db, 'users', userId); // Adjust the Firestore path
@@ -58,6 +225,9 @@ const QuickMenu = () => {
                     if (docSnap.exists()) {
                         // Assuming you have a 'credits' field in your Firestore document
                         const credits = docSnap.data().credits;
+                        if (credits <= 0)
+                            setShowModal(true);
+
                         setUserCredits(credits);
                     } else {
                         setUserCredits(null); // User document doesn't exist
@@ -68,7 +238,7 @@ const QuickMenu = () => {
             } else {
                 // No user is signed in or the user's session has expired.
                 setUserCredits(null); // Reset userCredits if no user is signed in
-                window.location.href="/authentication/sign-in"
+                window.location.href = "/authentication/sign-in"
             }
         });
 
@@ -114,7 +284,11 @@ const QuickMenu = () => {
       `;
         return (
             <ListGroup as="ul" bsPrefix='navbar-nav' className={`navbar-right-wrap ms-auto d-flex nav-top-wrap ${centerHorizontally}`}>
-                <Chip style={{ marginTop: "5px" }} label={"Remaining Credits: " + userCredits} />
+                <Chip
+                    onClick={handleShowModal}
+                    label={`Remaining Credits: ${userCredits}`}
+                    sx={{ marginTop: '5px', cursor: 'pointer' }}
+                />
                 <Dropdown as="li" className="ms-2">
                     <Dropdown.Toggle
                         as="a"
@@ -237,7 +411,12 @@ const QuickMenu = () => {
 
     return (
         <Fragment>
-            {hasMounted && isDesktop ? <QuickMenuDesktop /> : <QuickMenuMobile />}
+            {hasMounted && isDesktop ? (
+                <QuickMenuDesktop />
+            ) : (
+                <QuickMenuMobile />
+            )}
+            {ModalContent} {/* Render the modal content */}
         </Fragment>
     )
 }

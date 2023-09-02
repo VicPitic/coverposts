@@ -32,6 +32,7 @@ const GeneralSetting = () => {
 
   // Add a state variable to track the loading state
   const [isLoading, setIsLoading] = useState(false);
+  const [estimatedTime, setEstimatedTine] = useState(0);
 
   // Define a CSS override for the spinner
   const spinnerStyle = css`
@@ -104,60 +105,62 @@ const GeneralSetting = () => {
 
   const handleGeneratePosts = async (e) => {
     e.preventDefault();
-  
+
     if (userCredits > 0) {
       // Decrement the user's credits
       const updatedCredits = userCredits - 1;
-  
+
       try {
         // Update the credits in Firestore
         const userDocRef = doc(db, 'users', userId);
         await updateDoc(userDocRef, { credits: updatedCredits });
-  
+
+        const randomTime = Math.floor(Math.random() * (90 - 30 + 1)) + 30;
         // Set isLoading to true when starting the generation process
         setIsLoading(true);
-  
+        setEstimatedTine(randomTime);
+
         const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
           social_platform: socialPlatform,
           post_length: postLength,
           blog_url: blogUrl
         });
-  
+
         if (response.status === 200) {
           const data = response.data;
           setGeneratedPosts(data);
-  
-         
+
+
           // Scrape images for the provided blog URL
           const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
             blog_url: blogUrl
           });
-  
+
           if (scrapeResponse.status === 200) {
             const images = scrapeResponse.data;
             setImageUrls(images);
-  
+
             // Add the data to Firestore here
             if (userId && data && images) {
               try {
                 console.log(userId)
                 const userPostsRef = collection(db, 'users', userId, 'posts');
                 const batch = [];
-  
+
                 // Loop through generatedPosts and imageUrls to create batched Firestore writes
                 for (let i = 0; i < Math.min(data.length, images.length); i++) {
                   const post = data[i];
                   const imageUrl = images[i];
-  
+
                   const postDoc = {
                     text: post,
                     imageUrl: imageUrl,
                     timestamp: new Date(),
                   };
-  
+
                   batch.push(addDoc(userPostsRef, postDoc));
                 }
-  
+
                 // Commit the batched writes
                 await Promise.all(batch);
                 console.log('Data added to Firestore');
@@ -166,8 +169,8 @@ const GeneralSetting = () => {
               }
             }
           }
-  
-  
+
+
         } else {
           console.error('Error generating posts');
         }
@@ -184,10 +187,10 @@ const GeneralSetting = () => {
       });
     }
   };
-  
 
-      
-  
+
+
+
 
   const handleImageClick = (index) => {
     setSelectedPostIndex(index); // Store the index of the clicked card
@@ -293,11 +296,12 @@ const GeneralSetting = () => {
               {isLoading ? (
                 <div className="text-center">
                   <SyncLoader css={spinnerStyle} size={10} color={'#C58FFF'} loading={isLoading} />
+                  <p>Estimated Time: {estimatedTime !== null ? `${estimatedTime} seconds` : 'Calculating...'}</p>
                 </div>
               ) : (
                 <Button variant="primary" type="submit">
-                Generate Posts
-              </Button>
+                  Generate Posts
+                </Button>
               )}
             </Form>
 

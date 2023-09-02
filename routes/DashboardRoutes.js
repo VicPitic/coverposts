@@ -44,14 +44,14 @@ export const DashboardMenu = [
 	},
 	{
 		id: uuid(),
-		title: 'Settings',
-		icon: 'settings',
+		title: 'Subscription',
+		icon: 'dollar-sign',
 		link: '/pages/posts'
 	},
 	{
 		id: uuid(),
 		title: 'Get more credits',
-		icon: 'download',
+		icon: 'upload',
 		link: 'https://codescandy.gumroad.com/l/dashui-nextjs'
 	}
 ];
