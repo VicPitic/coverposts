@@ -3,7 +3,7 @@
 // import node module libraries
 import { Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
 import Link from 'next/link';
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
 
@@ -19,30 +19,38 @@ const SignUp = () => {
     const password = event.target.password.value;
 
     try {
-      // Create a new user with email and password
+      console.log("Creating user with email and password...");
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
+      console.log("User created successfully.");
       // You can access the newly created user with userCredential.user
       const user = userCredential.user;
 
+      console.log("Updating user profile...");
       // You can also update the user's profile with additional information
       await updateProfile(auth.currentUser, {
         displayName: username,
       });
 
+      console.log("User profile updated successfully.");
+
+      console.log("Adding user data to Firestore...");
       // Add user data to Firestore
       const userCollection = collection(db, "users"); // Assuming "users" is the name of your Firestore collection
-      await addDoc(userCollection, {
+      const userDocRef = doc(userCollection, user.uid); // Use the user's ID as the document ID
+      await setDoc(userDocRef, {
         username: username,
         email: email,
-        credits: 3
+        credits: 3,
         // Add any other user data you want to store in Firestore
       });
 
-      // Handle successful registration, e.g., redirect the user to another page
-      console.log("User registered successfully:", user);
 
-      location = "./"
+      console.log("User data added to Firestore successfully.");
+
+      // Handle successful registration, e.g., redirect the user to another page
+      console.log("Registration successful, redirecting...");
+      window.location.href = "/"; // Redirect to the homepage
     } catch (error) {
       // Handle errors during registration
       console.error("Error registering user:", error.message);

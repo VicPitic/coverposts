@@ -221,20 +221,26 @@ const QuickMenu = () => {
                 // Retrieve the user's credits from Firestore
                 const userDocRef = doc(db, 'users', userId); // Adjust the Firestore path
                 try {
+                   
                     const docSnap = await getDoc(userDocRef);
                     if (docSnap.exists()) {
+                        console.log('d')
                         // Assuming you have a 'credits' field in your Firestore document
                         const credits = docSnap.data().credits;
+                        console.log(docSnap.data())
                         if (credits <= 0)
                             setShowModal(true);
 
                         setUserCredits(credits);
+                        console.log('->',credits)
                     } else {
                         setUserCredits(null); // User document doesn't exist
                     }
                 } catch (error) {
                     console.error('Error fetching user credits:', error);
                 }
+
+
             } else {
                 // No user is signed in or the user's session has expired.
                 setUserCredits(null); // Reset userCredits if no user is signed in
