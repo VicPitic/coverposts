@@ -46,7 +46,7 @@ export const DashboardMenu = [
 		id: uuid(),
 		title: 'Subscription',
 		icon: 'dollar-sign',
-		link: '/pages/posts'
+		link: 'https://billing.stripe.com/p/login/cN23fF9tEd8u2JOdQQ'
 	},
 	{
 		id: uuid(),
