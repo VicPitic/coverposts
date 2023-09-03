@@ -6,11 +6,39 @@ import Link from 'next/link';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
+import axios from 'axios';
 
 // import hooks
+import toast from 'react-hot-toast';
 import useMounted from 'hooks/useMounted';
 
 const SignUp = () => {
+
+  // Event handler to handle the Axios POST request for Starter Package
+  const handleSelectStarter = () => {
+    axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
+      const { url } = response.data;
+      console.log(url);
+      window.location = url;
+    }).catch(err => {
+      toast.error(result)
+      console.log(err.message);
+    })
+  };
+
+  // Event handler to handle the Axios POST request for Premium Package
+  const handleSelectPremium = () => {
+    // Make an Axios POST request to your desired endpoint
+    axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
+      const { url } = response.data;
+      console.log(url);
+      window.location = url;
+    }).catch(err => {
+      toast.error(result)
+      console.log(err.message);
+    })
+  };
+
   const handleSignUp = async (event) => {
     event.preventDefault();
 
@@ -43,6 +71,36 @@ const SignUp = () => {
         email: email,
         credits: 3,
         // Add any other user data you want to store in Firestore
+      }).then(() => {
+
+        const params = new URLSearchParams(location.search);
+        const plan = params.get("plan");
+
+        if (plan === "starter") {
+          // Display loading toast while making the Axios request
+          toast.promise(
+            handleSelectStarter(),
+            {
+              loading: 'Creating starter account...',
+              success: 'Starter account created successfully',
+              error: 'Error creating starter account',
+            }
+          );
+        } else if (plan === "premium") {
+          // Display loading toast while making the Axios request
+          toast.promise(
+            handleSelectPremium(),
+            {
+              loading: 'Creating premium account...',
+              success: 'Premium account created successfully',
+              error: 'Error creating premium account',
+            }
+          );
+        }
+        else {
+          location = "./"
+        }
+
       });
 
 
@@ -50,10 +108,9 @@ const SignUp = () => {
 
       // Handle successful registration, e.g., redirect the user to another page
       console.log("Registration successful, redirecting...");
-      window.location.href = "/"; // Redirect to the homepage
     } catch (error) {
       // Handle errors during registration
-      console.error("Error registering user:", error.message);
+      toast.error("Error registering user:", error.message);
     }
   };
 
@@ -67,7 +124,9 @@ const SignUp = () => {
           {/* Card body */}
           <Card.Body className="p-6">
             <div className="mb-4">
-              <a href="/"><Image src="/images/brand/logo/logo-primary.svg" className="mb-2" alt="" /></a>
+              <center>
+                <a href="/"><Image style={{ width: "100px" }} src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" className="mb-2" alt="" /></a>
+              </center>
               <p className="mb-6">Please enter your user information.</p>
             </div>
             {/* Form */}
@@ -75,7 +134,7 @@ const SignUp = () => {
               <Form onSubmit={handleSignUp}>
                 {/* Username */}
                 <Form.Group className="mb-3" controlId="username">
-                  <Form.Label>Username or email</Form.Label>
+                  <Form.Label>Username</Form.Label>
                   <Form.Control type="text" name="username" placeholder="User Name" required="" />
                 </Form.Group>
 
@@ -110,7 +169,7 @@ const SignUp = () => {
                 <div>
                   {/* Button */}
                   <div className="d-grid">
-                    <Button variant="primary" type="submit">Create Free Account</Button>
+                    <Button variant="primary" type="submit">Create Account</Button>
                   </div>
                   <div className="d-md-flex justify-content-between mt-4">
                     <div className="mb-2 mb-md-0">
