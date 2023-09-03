@@ -7,11 +7,40 @@ import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
 import React, { useState } from 'react';
+import axios from 'axios';
+
 // import hooks
+import toast from 'react-hot-toast';
 import useMounted from 'hooks/useMounted';
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
+
+  // Event handler to handle the Axios POST request for Starter Package
+  const handleSelectStarter = () => {
+    axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
+      const { url } = response.data;
+      console.log(url);
+      window.location = url;
+    }).catch(err => {
+      toast.error(result)
+      console.log(err.message);
+    })
+  };
+
+  // Event handler to handle the Axios POST request for Premium Package
+  const handleSelectPremium = () => {
+    // Make an Axios POST request to your desired endpoint
+    axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
+      const { url } = response.data;
+      console.log(url);
+      window.location = url;
+    }).catch(err => {
+      toast.error(result)
+      console.log(err.message);
+    })
+  };
+
   const handleSignUp = async (event) => {
     event.preventDefault();
 
@@ -45,6 +74,36 @@ const SignUp = () => {
         email: email,
         credits: 3,
         // Add any other user data you want to store in Firestore
+      }).then(() => {
+
+        const params = new URLSearchParams(location.search);
+        const plan = params.get("plan");
+
+        if (plan === "starter") {
+          // Display loading toast while making the Axios request
+          toast.promise(
+            handleSelectStarter(),
+            {
+              loading: 'Creating starter account...',
+              success: 'Starter account created successfully',
+              error: 'Error creating starter account',
+            }
+          );
+        } else if (plan === "premium") {
+          // Display loading toast while making the Axios request
+          toast.promise(
+            handleSelectPremium(),
+            {
+              loading: 'Creating premium account...',
+              success: 'Premium account created successfully',
+              error: 'Error creating premium account',
+            }
+          );
+        }
+        else {
+          location = "./"
+        }
+
       });
 
       setIsLoading(false);
@@ -57,6 +116,7 @@ const SignUp = () => {
       // Handle errors during registration
       setIsLoading(false);
       console.error("Error registering user:", error.message);
+      toast.error("Error registering user:", error.message);
     }
   };
 
@@ -80,7 +140,7 @@ const SignUp = () => {
               <Form onSubmit={handleSignUp}>
                 {/* Username */}
                 <Form.Group className="mb-3" controlId="username">
-                  <Form.Label>Username or email</Form.Label>
+                  <Form.Label>Username</Form.Label>
                   <Form.Control type="text" name="username" placeholder="User Name" required="" />
                 </Form.Group>
 
