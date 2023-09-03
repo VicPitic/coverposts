@@ -6,19 +6,21 @@ import Link from 'next/link';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
-
+import React, { useState } from 'react';
 // import hooks
 import useMounted from 'hooks/useMounted';
 
 const SignUp = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const handleSignUp = async (event) => {
     event.preventDefault();
 
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-
+    setIsLoading(true);
     try {
+     
       console.log("Creating user with email and password...");
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -45,14 +47,15 @@ const SignUp = () => {
         // Add any other user data you want to store in Firestore
       });
 
-
+      setIsLoading(false);
       console.log("User data added to Firestore successfully.");
 
       // Handle successful registration, e.g., redirect the user to another page
       console.log("Registration successful, redirecting...");
-      window.location.href = "/"; // Redirect to the homepage
+    window.location.href = "/"; // Redirect to the homepage
     } catch (error) {
       // Handle errors during registration
+      setIsLoading(false);
       console.error("Error registering user:", error.message);
     }
   };
@@ -67,8 +70,10 @@ const SignUp = () => {
           {/* Card body */}
           <Card.Body className="p-6">
             <div className="mb-4">
-              <a href="/"><Image src="/images/brand/logo/logo-primary.svg" className="mb-2" alt="" /></a>
-              <p className="mb-6">Please enter your user information.</p>
+              <center>
+                <a href="/"><Image style={{ width: "100px" }} src="https://ucarecdn.com/7de570aa-a8b5-4ea7-aaa9-9b4bf678d24f/" className="mb-2" alt="" /></a>
+              </center>
+              <p className="mb-6">Automate your content flywheel with <b>Coverposts</b></p>
             </div>
             {/* Form */}
             {hasMounted &&
@@ -110,7 +115,13 @@ const SignUp = () => {
                 <div>
                   {/* Button */}
                   <div className="d-grid">
-                    <Button variant="primary" type="submit">Create Free Account</Button>
+                    <Button variant="primary" type="submit" disabled={isLoading}>
+                      {isLoading ? (
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      ) : (
+                        'Create Free Account'
+                      )}
+                    </Button>
                   </div>
                   <div className="d-md-flex justify-content-between mt-4">
                     <div className="mb-2 mb-md-0">
