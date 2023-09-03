@@ -18,6 +18,7 @@ const SignUp = () => {
 
   // Event handler to handle the Axios POST request for Starter Package
   const handleSelectStarter = () => {
+    if (typeof window !== 'undefined') {
     axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
       const { url } = response.data;
       console.log(url);
@@ -26,11 +27,13 @@ const SignUp = () => {
       toast.error(result)
       console.log(err.message);
     })
+  }
   };
 
   // Event handler to handle the Axios POST request for Premium Package
   const handleSelectPremium = () => {
     // Make an Axios POST request to your desired endpoint
+    if (typeof window !== 'undefined') {
     axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
       const { url } = response.data;
       console.log(url);
@@ -39,6 +42,7 @@ const SignUp = () => {
       toast.error(result)
       console.log(err.message);
     })
+  }
   };
 
   const handleSignUp = async (event) => {
@@ -111,7 +115,9 @@ const SignUp = () => {
 
       // Handle successful registration, e.g., redirect the user to another page
       console.log("Registration successful, redirecting...");
+      if (typeof window !== 'undefined') {
     window.location.href = "/"; // Redirect to the homepage
+      }
     } catch (error) {
       // Handle errors during registration
       setIsLoading(false);

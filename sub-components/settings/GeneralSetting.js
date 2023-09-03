@@ -173,6 +173,9 @@ const GeneralSetting = () => {
 
         } else {
           console.error('Error generating posts');
+          toast('An error occurred, please try again', {
+            icon: '☹️',
+          });
         }
       } catch (error) {
         console.error('Error:', error);
