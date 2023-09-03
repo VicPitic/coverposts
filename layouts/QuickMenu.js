@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 import { db, app } from '../firebase'; // Import your Firebase configuration
+import toast, { Toaster } from 'react-hot-toast';
 
 // simple bar scrolling used for notification item scrolling
 import SimpleBar from 'simplebar-react';
@@ -37,6 +38,7 @@ const QuickMenu = () => {
 
     // Event handler to handle the Axios POST request for Starter Package
     const handleSelectStarter = () => {
+        toast('We are generating your secure checkout, please wait')
         axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
             const { url } = response.data;
             console.log(url);
@@ -49,6 +51,8 @@ const QuickMenu = () => {
 
     // Event handler to handle the Axios POST request for Premium Package
     const handleSelectPremium = () => {
+        toast('We are generating your secure checkout, please wait')
+
         // Make an Axios POST request to your desired endpoint
         axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
             const { url } = response.data;
@@ -83,7 +87,7 @@ const QuickMenu = () => {
     const ModalContent = (
         <Modal show={showModal} onHide={handleCloseModal} centered>
             <Modal.Header closeButton>
-                <Modal.Title>You are out of credits. Select a plan</Modal.Title>
+                <Modal.Title>Get more credits. Select a plan</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
