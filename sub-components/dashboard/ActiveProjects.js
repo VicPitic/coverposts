@@ -23,13 +23,39 @@ const ActiveProjects = () => {
     const [isHomePage, setIsHomePage] = useState(null); // New state variable
 
     const socialMediaShareOptions = [
-        { platform: 'facebook', label: 'Facebook', icon: 'facebook', shareUrl: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(selectedPost?.picture || "")}` },
-        { platform: 'twitter', label: 'Twitter', icon: 'twitter', shareUrl: `https://twitter.com/intent/tweet?url=${encodeURIComponent(selectedPost?.picture || "")}&text=${encodeURIComponent(selectedPost?.text || "")}` },
-        { platform: 'linkedin', label: 'LinkedIn', icon: 'linkedin', shareUrl: `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(selectedPost?.picture || "")}&title=${encodeURIComponent(selectedPost?.text || "")}` },
-        { platform: 'reddit', label: 'Reddit', icon: 'reddit', shareUrl: `https://www.reddit.com/submit?url=${encodeURIComponent(selectedPost?.picture || "")}&title=${encodeURIComponent(selectedPost?.text || "")}` },
-        { platform: 'instagram', label: 'Instagram', icon: 'instagram', shareUrl: `https://www.instagram.com/?url=${encodeURIComponent(selectedPost?.picture || "")}` },
+        {
+            platform: 'facebook',
+            label: 'Facebook',
+            icon: 'facebook',
+            shareUrl: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+        },
+        {
+            platform: 'twitter',
+            label: 'Twitter',
+            icon: 'twitter',
+            shareUrl: `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(selectedPost?.text || '')}`,
+        },
+        {
+            platform: 'linkedin',
+            label: 'LinkedIn',
+            icon: 'linkedin',
+            shareUrl: `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(selectedPost?.text || '')}`,
+        },
+        {
+            platform: 'reddit',
+            label: 'Reddit',
+            icon: 'reddit',
+            shareUrl: `https://www.reddit.com/submit?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(selectedPost?.text || '')}`,
+        },
+        {
+            platform: 'instagram',
+            label: 'Instagram',
+            icon: 'instagram',
+            shareUrl: 'https://www.instagram.com',
+        },
         // Add more social media platforms and their share URLs here
     ];
+
 
     const handlePreviewPost = (post) => {
         setSelectedPost(post);
