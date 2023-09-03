@@ -125,7 +125,7 @@ const QuickMenu = () => {
                             <div>
                                 <center>
                                     <img
-                                        src="https://ucarecdn.com/ce399912-445f-4692-b176-cc3866db557c/13.png"
+                                        src="https://ucarecdn.com/c62c6aa8-f3d3-4d49-9e40-3a2f58c62108/15.png"
                                         alt="Customizable Layouts image used."
                                         className="mx-auto"
                                     />
@@ -221,7 +221,7 @@ const QuickMenu = () => {
                 // Retrieve the user's credits from Firestore
                 const userDocRef = doc(db, 'users', userId); // Adjust the Firestore path
                 try {
-                   
+
                     const docSnap = await getDoc(userDocRef);
                     if (docSnap.exists()) {
                         console.log('d')
@@ -232,7 +232,7 @@ const QuickMenu = () => {
                             setShowModal(true);
 
                         setUserCredits(credits);
-                        console.log('->',credits)
+                        console.log('->', credits)
                     } else {
                         setUserCredits(null); // User document doesn't exist
                     }
@@ -311,24 +311,18 @@ const QuickMenu = () => {
                         aria-labelledby="dropdownUser"
                         show
                     >
-                        <Dropdown.Item as="div" className="px-4 pb-0 pt-2" bsPrefix=' '>
-                            <div className="lh-1 ">
-                                <h5 className="mb-1"> John E. Grainger</h5>
-                                <a href="#" className="text-inherit fs-6">View my profile</a>
-                            </div>
+                        <Dropdown.Item as="div" className="px-4 pb-0 pt-2 text-primary" bsPrefix=' '>
+                            <i className="fe fe-star me-2"></i> Get credits
                             <div className=" dropdown-divider mt-3 mb-2"></div>
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="2">
-                            <i className="fe fe-user me-2"></i> Edit Profile
+                            <i className="fe fe-user me-2"></i> Dashboard
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="3">
-                            <i className="fe fe-activity me-2"></i> Activity Log
-                        </Dropdown.Item>
-                        <Dropdown.Item className="text-primary">
-                            <i className="fe fe-star me-2"></i> Go Pro
+                            <i className="fe fe-activity me-2"></i> Your posts
                         </Dropdown.Item>
                         <Dropdown.Item >
-                            <i className="fe fe-settings me-2"></i> Account Settings
+                            <i className="fe fe-settings me-2"></i> Subscription
                         </Dropdown.Item>
                         <Dropdown.Item>
                             <i className="fe fe-power me-2"></i>Sign Out
