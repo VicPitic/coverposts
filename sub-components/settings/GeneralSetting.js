@@ -119,8 +119,8 @@ const GeneralSetting = () => {
         // Set isLoading to true when starting the generation process
         setIsLoading(true);
         setEstimatedTine(randomTime);
-
-        const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
+        console.log(socialPlatform)
+        const response = await axios.post('http://127.0.0.1:5000/generate_posts', {
           social_platform: socialPlatform,
           post_length: postLength,
           blog_url: blogUrl
@@ -128,8 +128,9 @@ const GeneralSetting = () => {
 
         if (response.status === 200) {
           const data = response.data;
-          setGeneratedPosts(data);
-
+          console.log(data)
+          setGeneratedPosts(data.text);
+          setImageUrls(data.images[0]['response'])
 
           // Scrape images for the provided blog URL
           const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
@@ -138,7 +139,8 @@ const GeneralSetting = () => {
 
           if (scrapeResponse.status === 200) {
             const images = scrapeResponse.data;
-            setImageUrls(images);
+            setImageUrls((prevImageUrls) => [...prevImageUrls, ...images]);
+
 
             // Add the data to Firestore here
             if (userId && data && images) {
@@ -275,9 +277,9 @@ const GeneralSetting = () => {
                     required
                   >
                     <option value="">Select post length</option>
-                    <option value="short">Short (50-150 words)</option>
-                    <option value="medium">Medium (150 - 300 words)</option>
-                    <option value="long">Long (300+ words)</option>
+                    <option value="50">Short (50-150 words)</option>
+                    <option value="100">Medium (150 - 300 words)</option>
+                    <option value="300">Long (300+ words)</option>
                   </Form.Control>
                 </Col>
               </Row>
