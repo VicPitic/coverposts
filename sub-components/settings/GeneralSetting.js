@@ -126,7 +126,7 @@ const GeneralSetting = () => {
         setIsLoading(true);
         setEstimatedTine(randomTime);
 
-        const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
+        const response = await axios.post('https://coverpostsapiv2.onrender.com/generate_posts', {
           social_platform: socialPlatform,
           post_length: postLength,
           blog_url: blogUrl,
@@ -142,7 +142,7 @@ const GeneralSetting = () => {
 
 
           // Scrape images for the provided blog URL
-          const scrapeResponse = await axios.post('https://coverpostsapi.onrender.com/scrape_images', {
+          const scrapeResponse = await axios.post('https://coverpostsapiv2.onrender.com/scrape_images', {
             blog_url: blogUrl
           });
 
