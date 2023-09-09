@@ -19,6 +19,11 @@ const GeneralSetting = () => {
   const [socialPlatform, setSocialPlatform] = useState('');
   const [postLength, setPostLength] = useState('');
   const [blogUrl, setBlogUrl] = useState('');
+  const [numHashtags, setNumHashtags] = useState(0);
+  const [includeEmojis, setIncludeEmojis] = useState(false);
+
+  const [postStyle, setPostStyle] = useState(""); // Initialize with an empty string
+
   const [generatedPosts, setGeneratedPosts] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -29,6 +34,7 @@ const GeneralSetting = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [userId, setUserId] = useState();
   const [userCredits, setUserCredits] = useState(null);
+
 
   // Add a state variable to track the loading state
   const [isLoading, setIsLoading] = useState(false);
@@ -123,12 +129,16 @@ const GeneralSetting = () => {
         const response = await axios.post('https://coverpostsapi.onrender.com/generate_posts', {
           social_platform: socialPlatform,
           post_length: postLength,
-          blog_url: blogUrl
+          blog_url: blogUrl,
+          include_hashtags: numHashtags,
+          post_style: postStyle,
+          include_emojis: includeEmojis
         });
 
         if (response.status === 200) {
           const data = response.data;
-          setGeneratedPosts(data);
+          setGeneratedPosts(data.text);
+          setImageUrls(data.images[0]['response'])
 
 
           // Scrape images for the provided blog URL
@@ -138,7 +148,7 @@ const GeneralSetting = () => {
 
           if (scrapeResponse.status === 200) {
             const images = scrapeResponse.data;
-            setImageUrls(images);
+            setImageUrls((prevImageUrls) => [...prevImageUrls, ...images]);
 
             // Add the data to Firestore here
             if (userId && data && images) {
@@ -241,6 +251,20 @@ const GeneralSetting = () => {
             </div>
             <Form onSubmit={handleGeneratePosts}>
               <Row className="mb-3">
+                <Form.Label className="col-sm-3 col-form-label" htmlFor="blogUrl">
+                  Blog URL
+                </Form.Label>
+                <Col sm={9}>
+                  <Form.Control
+                    type="url"
+                    id="blogUrl"
+                    value={blogUrl}
+                    onChange={(e) => setBlogUrl(e.target.value)}
+                    required
+                  />
+                </Col>
+              </Row>
+              <Row className="mb-3">
                 <Form.Label className="col-sm-3 col-form-label" htmlFor="socialPlatform">
                   Social Platform
                 </Form.Label>
@@ -282,20 +306,66 @@ const GeneralSetting = () => {
                 </Col>
               </Row>
               <Row className="mb-3">
-                <Form.Label className="col-sm-3 col-form-label" htmlFor="blogUrl">
-                  Blog URL
+                <Form.Label className="col-sm-3 col-form-label" htmlFor="numHashtags">
+                  Number of Hashtags in the post
                 </Form.Label>
                 <Col sm={9}>
                   <Form.Control
-                    type="url"
-                    id="blogUrl"
-                    value={blogUrl}
-                    onChange={(e) => setBlogUrl(e.target.value)}
-                    required
+                    type="number"
+                    id="numHashtags"
+                    value={numHashtags}
+                    onChange={(e) => setNumHashtags(e.target.value)}
+                    min="0" // Set a minimum value if needed
                   />
                 </Col>
               </Row>
+              <Row className="mb-3">
+                <Form.Label className="col-sm-3 col-form-label" htmlFor="postStyle">
+                  Post Writing Style
+                </Form.Label>
+                <Col sm={9}>
+                  <Form.Control
+                    as="select"
+                    id="postStyle"
+                    value={postStyle}
+                    onChange={(e) => setPostStyle(e.target.value)}
+                    required
+                  >
+                    <option value="">Select post style</option>
+                    <option value="casual (Casual posts are friendly and conversational. They may include everyday language and a relaxed tone.)">
+                      Casual 😊 (Casual posts are friendly and conversational. They may include everyday language and a relaxed tone.)
+                    </option>
+                    <option value="formal (Formal posts are professional and serious in tone. They use proper language and are suitable for formal occasions.)">
+                      Formal 🕴️ (Formal posts are professional and serious in tone. They use proper language and are suitable for formal occasions.)
+                    </option>
+                    <option value="creative (Creative posts encourage imaginative and artistic expression. They can include storytelling and unique ideas.)">
+                      Creative 🎨 (Creative posts encourage imaginative and artistic expression. They can include storytelling and unique ideas.)
+                    </option>
+                    <option value="professional (Professional posts are polished and well-structured. They are suitable for business and industry-related content.)">
+                      Professional 👔 (Professional posts are polished and well-structured. They are suitable for business and industry-related content.)
+                    </option>
+                    <option value="funny (Funny posts aim to entertain and amuse. They often include humor and witty remarks.)">
+                      Funny 😄 (Funny posts aim to entertain and amuse. They often include humor and witty remarks.)
+                    </option>
+                    {/* Add more post style options with descriptions here */}
+                  </Form.Control>
 
+                </Col>
+              </Row>
+              <Row className="mb-3">
+                <Form.Label className="col-sm-3 col-form-label" htmlFor="includeEmojis">
+                  Include Emojis
+                </Form.Label>
+                <Col sm={9}>
+                  <Form.Check
+                    type="switch"
+                    id="includeEmojis"
+                    label={includeEmojis ? 'Include Emojis' : 'Don\'t Include Emojis'}
+                    checked={includeEmojis}
+                    onChange={() => setIncludeEmojis(!includeEmojis)}
+                  />
+                </Col>
+              </Row>
               {isLoading ? (
                 <div className="text-center">
                   <SyncLoader css={spinnerStyle} size={10} color={'#C58FFF'} loading={isLoading} />
