@@ -4,7 +4,7 @@
 import { Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
 import Link from 'next/link';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from '../../../../firebase'; // Import the Firebase auth object from your firebase.js
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -19,31 +19,95 @@ const SignUp = () => {
   // Event handler to handle the Axios POST request for Starter Package
   const handleSelectStarter = () => {
     if (typeof window !== 'undefined') {
-    axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
-      const { url } = response.data;
-      console.log(url);
-      window.location = url;
-    }).catch(err => {
-      toast.error(result)
-      console.log(err.message);
-    })
-  }
+      axios.post("https://coverpostsbillingapi.onrender.com/api/create-standard").then(response => {
+        const { url } = response.data;
+        console.log(url);
+        window.location = url;
+      }).catch(err => {
+        toast.error(result)
+        console.log(err.message);
+      })
+    }
   };
 
   // Event handler to handle the Axios POST request for Premium Package
   const handleSelectPremium = () => {
     // Make an Axios POST request to your desired endpoint
     if (typeof window !== 'undefined') {
-    axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
-      const { url } = response.data;
-      console.log(url);
-      window.location = url;
-    }).catch(err => {
-      toast.error(result)
-      console.log(err.message);
-    })
-  }
+      axios.post('https://coverpostsbillingapi.onrender.com/api/create-premium').then(response => {
+        const { url } = response.data;
+        console.log(url);
+        window.location = url;
+      }).catch(err => {
+        toast.error(result)
+        console.log(err.message);
+      })
+    }
   };
+
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+
+      // The user is now signed in with Google
+      const user = userCredential.user;
+
+      // Handle successful registration based on the plan parameter
+      const params = new URLSearchParams(location.search);
+      const plan = params.get("plan");
+
+      if (plan === "starter") {
+        // Display loading toast while making the Axios request for the starter plan
+        toast.promise(
+          handleSelectStarter(),
+          {
+            loading: 'Creating starter account...',
+            success: 'Starter account created successfully',
+            error: 'Error creating starter account',
+          }
+        );
+      } else if (plan === "premium") {
+        // Display loading toast while making the Axios request for the premium plan
+        toast.promise(
+          handleSelectPremium(),
+          {
+            loading: 'Creating premium account...',
+            success: 'Premium account created successfully',
+            error: 'Error creating premium account',
+          }
+        );
+      } else {
+        // Redirect to the homepage if the plan parameter is not specified
+        if (typeof window !== 'undefined') {
+          window.location.href = "/";
+        }
+      }
+
+      // Save user data to Firestore
+      console.log("Adding user data to Firestore...");
+      const userCollection = collection(db, "users"); // Assuming "users" is the name of your Firestore collection
+      const userDocRef = doc(userCollection, user.uid); // Use the user's ID as the document ID
+      await setDoc(userDocRef, {
+        username: user.displayName,
+        email: user.email,
+        credits: 3,
+        // Add any other user data you want to store in Firestore
+      });
+
+      // Handle successful registration, e.g., redirect the user to another page
+      if (typeof window !== 'undefined') {
+        window.location.href = "/"; // Redirect to the homepage
+      }
+    } catch (error) {
+      // Handle errors during Google authentication
+      console.error("Error signing in with Google:", error.message);
+      toast.error("Error signing in with Google:", error.message);
+    }
+  };
+
+
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -53,7 +117,7 @@ const SignUp = () => {
     const password = event.target.password.value;
     setIsLoading(true);
     try {
-     
+
       console.log("Creating user with email and password...");
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -116,7 +180,7 @@ const SignUp = () => {
       // Handle successful registration, e.g., redirect the user to another page
       console.log("Registration successful, redirecting...");
       if (typeof window !== 'undefined') {
-    window.location.href = "/"; // Redirect to the homepage
+        window.location.href = "/"; // Redirect to the homepage
       }
     } catch (error) {
       // Handle errors during registration
@@ -144,6 +208,19 @@ const SignUp = () => {
             {/* Form */}
             {hasMounted &&
               <Form onSubmit={handleSignUp}>
+                <div className="d-grid">
+                  <Button variant="secondary" onClick={handleGoogleSignUp} disabled={isLoading}>
+                    <img style={{ width: "25px" }} src='https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png' />
+                    {isLoading ? (
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    ) : (
+                      ' Sign up with Google'
+                    )}
+                  </Button>
+                </div>
+
+                <hr />
+
                 {/* Username */}
                 <Form.Group className="mb-3" controlId="username">
                   <Form.Label>Username</Form.Label>
@@ -189,6 +266,8 @@ const SignUp = () => {
                       )}
                     </Button>
                   </div>
+                  <br />
+
                   <div className="d-md-flex justify-content-between mt-4">
                     <div className="mb-2 mb-md-0">
                       <a href="/authentication/sign-in" className="fs-5">Already member? Login </a>
