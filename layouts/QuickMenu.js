@@ -257,6 +257,23 @@ const QuickMenu = () => {
     }, []); // The empty array makes this effect run only once on component mount
 
 
+    useEffect(() => {
+        // Hotjar Tracking Code
+        (function (h, o, t, j, a, r) {
+            h.hj =
+                h.hj ||
+                function () {
+                    (h.hj.q = h.hj.q || []).push(arguments);
+                };
+            h._hjSettings = { hjid: 3638434, hjsv: 6 };
+            a = o.getElementsByTagName('head')[0];
+            r = o.createElement('script');
+            r.async = 1;
+            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+    }, []);
+
     const Notifications = () => {
         return (
             <SimpleBar style={{ maxHeight: '300px' }}>
