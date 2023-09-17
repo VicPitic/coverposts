@@ -58,6 +58,18 @@ const SignUp = () => {
       const params = new URLSearchParams(location.search);
       const plan = params.get("plan");
 
+
+      // Save user data to Firestore
+      console.log("Adding user data to Firestore...");
+      const userCollection = collection(db, "users"); // Assuming "users" is the name of your Firestore collection
+      const userDocRef = doc(userCollection, user.uid); // Use the user's ID as the document ID
+      await setDoc(userDocRef, {
+        username: user.displayName,
+        email: user.email,
+        credits: 3,
+        // Add any other user data you want to store in Firestore
+      });
+
       if (plan === "starter") {
         // Display loading toast while making the Axios request for the starter plan
         toast.promise(
@@ -85,21 +97,9 @@ const SignUp = () => {
         }
       }
 
-      // Save user data to Firestore
-      console.log("Adding user data to Firestore...");
-      const userCollection = collection(db, "users"); // Assuming "users" is the name of your Firestore collection
-      const userDocRef = doc(userCollection, user.uid); // Use the user's ID as the document ID
-      await setDoc(userDocRef, {
-        username: user.displayName,
-        email: user.email,
-        credits: 3,
-        // Add any other user data you want to store in Firestore
-      });
 
-      // Handle successful registration, e.g., redirect the user to another page
-      if (typeof window !== 'undefined') {
-        window.location.href = "/"; // Redirect to the homepage
-      }
+
+
     } catch (error) {
       // Handle errors during Google authentication
       console.error("Error signing in with Google:", error.message);
