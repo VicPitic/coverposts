@@ -179,9 +179,6 @@ const SignUp = () => {
 
       // Handle successful registration, e.g., redirect the user to another page
       console.log("Registration successful, redirecting...");
-      if (typeof window !== 'undefined') {
-        window.location.href = "/"; // Redirect to the homepage
-      }
     } catch (error) {
       // Handle errors during registration
       setIsLoading(false);
