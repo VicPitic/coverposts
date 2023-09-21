@@ -114,12 +114,9 @@ const GeneralSetting = () => {
 
     if (userCredits > 0) {
       // Decrement the user's credits
-      const updatedCredits = userCredits - 1;
 
       try {
         // Update the credits in Firestore
-        const userDocRef = doc(db, 'users', userId);
-        await updateDoc(userDocRef, { credits: updatedCredits });
 
         const randomTime = Math.floor(Math.random() * (90 - 30 + 1)) + 30;
         // Set isLoading to true when starting the generation process
@@ -134,51 +131,71 @@ const GeneralSetting = () => {
           post_style: postStyle,
           include_emojis: includeEmojis
         });
-
+        console.log('API Response:', response.data);
         if (response.status === 200) {
           const data = response.data;
-          setGeneratedPosts(data.text);
-          setImageUrls(data.images[0]['response'])
 
+          if (data && data.images && data.text) {
+            setGeneratedPosts(data.text);
+            setImageUrls(data.images[0]['response']);
+            // Rest of the code
 
-          // Scrape images for the provided blog URL
-          const scrapeResponse = await axios.post('https://coverpostsapiv2.onrender.com/scrape_images', {
-            blog_url: blogUrl
-          });
+            setGeneratedPosts(data.text);
+            setImageUrls(data.images[0]['response'])
 
-          if (scrapeResponse.status === 200) {
-            const images = scrapeResponse.data;
-            setImageUrls((prevImageUrls) => [...prevImageUrls, ...images]);
+            const updatedCredits = userCredits - 1;
+            const userDocRef = doc(db, 'users', userId);
+            await updateDoc(userDocRef, { credits: updatedCredits });
 
-            // Add the data to Firestore here
-            if (userId && data && images) {
-              try {
-                console.log(userId)
-                const userPostsRef = collection(db, 'users', userId, 'posts');
-                const batch = [];
+            // Scrape images for the provided blog URL
+            const scrapeResponse = await axios.post('https://coverpostsapiv2.onrender.com/scrape_images', {
+              blog_url: blogUrl
+            });
 
-                // Loop through generatedPosts and imageUrls to create batched Firestore writes
-                for (let i = 0; i < Math.min(data.length, images.length); i++) {
-                  const post = data[i];
-                  const imageUrl = images[i];
+            if (scrapeResponse.status === 200) {
+              const images = scrapeResponse.data;
+              setImageUrls((prevImageUrls) => [...prevImageUrls, ...images]);
 
-                  const postDoc = {
-                    text: post,
-                    imageUrl: imageUrl,
-                    timestamp: new Date(),
-                  };
+              // Add the data to Firestore here
+              if (userId && data && images) {
+                try {
+                  console.log(userId)
+                  const userPostsRef = collection(db, 'users', userId, 'posts');
+                  const batch = [];
 
-                  batch.push(addDoc(userPostsRef, postDoc));
+                  // Loop through generatedPosts and imageUrls to create batched Firestore writes
+                  for (let i = 0; i < Math.min(data.length, images.length); i++) {
+                    const post = data[i];
+                    const imageUrl = images[i];
+
+                    const postDoc = {
+                      text: post,
+                      imageUrl: imageUrl,
+                      timestamp: new Date(),
+                    };
+
+                    batch.push(addDoc(userPostsRef, postDoc));
+                  }
+
+                  // Commit the batched writes
+                  await Promise.all(batch);
+                  console.log('Data added to Firestore');
+                } catch (error) {
+                  console.error('Error adding data to Firestore:', error);
                 }
-
-                // Commit the batched writes
-                await Promise.all(batch);
-                console.log('Data added to Firestore');
-              } catch (error) {
-                console.error('Error adding data to Firestore:', error);
               }
             }
           }
+          else{
+            toast('We are sorry, but the  article could not be scanned. Please try a different blog or provider. For more assistance please get in touch with us through live chat!', {
+              icon: '☹️',
+              duration: 9000,
+            });
+          }
+
+
+
+
 
 
         } else {
